@@ -229,9 +229,18 @@
 每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
 
 接下来我们概述下iOS中关键的网络api以及使用时要注意的：
+下面只是简单了解下每一个
 </code></pre><p>  (1).NSURLConnection<br>      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与Web Service交互、获取图片或视频，或者只是简单地得到一个格式化的HTML文档。<br>      它构建在NSStream之上，并且在设计时针对如下4个常见的URI模式进行了优化支持：文件、HTTP、HTTPS与FTP。 虽然NSURLConnection限制了你所能使用的协议，但它对缓存读写的很多底层工作进行了抽象，包括对认证内建支持。并且提供了一个健壮的缓存引擎。<br>      NSURLConnection接口中的内容并不多，它主要依赖于NSURLConnectionDelegate 协议，应用可以凭借后者介入到连接生命周期的很多点上。在默认情况下，NSURLConnection请求是异步的；不过有一个便捷方法可以发送同步请求。同步请求会阻塞调用线程，因此你也需要根据这一点来设计应用。这里简单先了解下NSURLConnection.值得一提的是 AFNetworking3.0版本以前就是构建于NSURLConnection。<br>例子：通过NSURLConnection进行异步\同步下载，GET POST 请求。 <a href="http://blog.csdn.net/chaoyuan899/article/details/27656141" target="_blank" rel="external">连接</a>       </p>
 <p>简单了解下URI：在电脑术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对任何（包括本地和互联网）的资源通过特定的协议进行交互操作。URI由包括确定语法和相关协议的方案所定义。<br>Web上可用的每种资源 -HTML文档、图像、视频片段、程序等 - 由一个通用资源标识符（Uniform Resource Identifier, 简称”URI”）进行定位。<br>URI、URL和URN<br>URI ：Uniform Resource Identifier，统一资源标识符；<br>URL：Uniform Resource Locator，统一资源定位符；<br>URN：Uniform Resource Name，统一资源名称。<br>其中，URL,URN是URI的子集。</p>
+<pre><code>(2).Game kit
+Game Kit的核心功能在于为iOS 应用程序提供了另一个 点到点 的网络选项。在传统的网络配置中，Game Kit构建在Bonjour之上；然而 GameKit并不需要网络基础设施就能使用。它能创建自组(ad-hoc)的Bluetooth Personal Area Networks(PAN),这样在极少或是没有基础设施的地方，它就是非常棒的网络候选者了。
+在创建网络时，Game kit 只需要会话标示符，显示名与连接模式即可。不需要socket配置或是任何其他底层网络就可以实现连接点之间的通信。Game kit通过GKSessionDelegate协议进行通信。
 
+
+(3)Bonjour
+Bonjour是apple对零配置(zerocnf)网络的实现。它提供了一种机制，可以检测并与网络中的设备或服务进行连接，同时无须了解设备的网络地址，Bonjour通过名字、服务类型与域这个元组来引用服务。它对多播DNS与基于DNS的服务探测，所要求的底层网络进行了抽象。
+在Cocoa层，NSNetService API提供了一个接口，用于发布和解析Bonjour服务的地址信息。可以通过NSNetServiceBrowser API探测网络上可用的服务。发布Bonjour服务（甚至使用cocos层的api）需要理解Core Fondation才能配置好通信所需的socket.
+</code></pre>
       
     </div>
     
