@@ -19,7 +19,7 @@
 本人不理解的是上面apps那一行是做什么的？ 有人知道吗？知道的请指点下.
 接下来我们简单看一下">
 <meta property="og:image" content="http://jiecoding.github.io/blogImages/networkImage.png">
-<meta property="og:updated_time" content="2016-02-01T06:03:37.000Z">
+<meta property="og:updated_time" content="2016-02-01T06:08:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解iOS网络框架">
 <meta name="twitter:description" content="Hello,大家好，我们一起来讨论分析下，iOS网路部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.
@@ -240,17 +240,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="http://jiecoding.github.io/blogImages/networkImage.png" class="img-shadow"></p>
-<p>  Hello,大家好，我们一起来讨论分析下，iOS网路部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.</p>
+        <p>  Hello,大家好，我们一起来讨论分析下，iOS网路部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.</p>
 <p>  我们通常开发一款与网络有关的iOS应用时候，在潜移默化中已经用到了Objective-c中网络层的组织形式，就像上图一样，每个iOS应用都位于某个网络框架栈之上。</p>
 <p>本人不理解的是上面apps那一行是做什么的？ 有人知道吗？知道的请指点下.</p>
 <p>接下来我们简单看一下，这个图。</p>
+<p><img src="http://jiecoding.github.io/blogImages/networkImage.png" class="img-shadow"></p>
 <p>除了apps那一行，我暂时不知道是干嘛的。</p>
 <p>位于最上层的就是cocoa层了：包含了用于URL加载的Objective-C API、Bonjour与Game kit.<br>Bonjour可能有的人不知道，这里就暂时做个简介，后期会深入说明：<br>Bonjour(法语中的你好)是一种能够自动查询接入网络中的设备或应用程序的协议。Bonjour 抽象掉 ip 和 port 的概念，让我们聚焦于更容易为人类思维理解的 service。通过 Bonjour，一个应用程序 publish 一个网络服务 service，然后网络中的其他程序就能自动发现这个 service，从而可以向这个 service 查询其 ip 和 port，然后通过获得的 ip 和 port 建立 socket 链接进行通信。通常我们是通过 NSNetService 和 NSNetServiceBrowser 来使用 Bonjour 的，前者用于建立与发布 service，后者用于监听查询网络上的 service。</p>
 <p>Cocoa层下面的是<br>Core Foundation 这是一套C API，其中包含了CFNetwork, 这是大多数应用级别的网络代码的基础。CFNetwork在CFStream与CFSocket之上提供给了一个简单的网络接口。这两个类是针对BSD Socket的轻量级封装，后者形成了最下面的层，与无线硬件最为接近。BSD Socket严格使用C 来实现，向开发者提供了与远程设备或服务器进行通信的完全控制能力。</p>
 <p>沿着框架向下移动每一层，你都会获得更为严密的控制，但却失去了上一层提供的易用性与抽象能力，虽然有时是可以的，不过apple建议我们还是要位于CFNetwork层及其之上 。BSD层的原始socket无法访问系统范围的虚拟专用网络，也无法激活Wi-Fi和蜂窝无线电，而这些CFNetwork已经帮我们处理好了。</p>
 <p>所以目前为止，我们大多数还是用Cocoa层和Core Foundation 层这两个比较多。</p>
-<p>Hardware</p>
+<p>Hardware这层关于硬件的暂时先不说 …….</p>
 
       
     </div>
