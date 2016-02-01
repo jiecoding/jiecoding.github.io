@@ -4,18 +4,33 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>如何更有钱 | Jay</title>
+  <title>iOS 网络 API | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="测试~~~~~思考：    运行循环？     各种关于网络的API？     响应式的网络应用框架？及其应用场景">
+  <meta name="description" content="框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
+
+每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
+
+接下来我们概述下iOS中关键的网络api以及使用时要注意的：
+  (1).NSURLConnection      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何更有钱">
-<meta property="og:url" content="http://yoursite.com/2016/01/29/iOSNetwork-function1/index.html">
+<meta property="og:title" content="iOS 网络 API">
+<meta property="og:url" content="http://yoursite.com/2016/02/01/iOSNetwork-function3/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="测试~~~~~思考：    运行循环？     各种关于网络的API？     响应式的网络应用框架？及其应用场景">
-<meta property="og:updated_time" content="2016-02-01T01:39:33.000Z">
+<meta property="og:description" content="框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
+
+每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
+
+接下来我们概述下iOS中关键的网络api以及使用时要注意的：
+  (1).NSURLConnection      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与">
+<meta property="og:updated_time" content="2016-02-01T07:28:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何更有钱">
-<meta name="twitter:description" content="测试~~~~~思考：    运行循环？     各种关于网络的API？     响应式的网络应用框架？及其应用场景">
+<meta name="twitter:title" content="iOS 网络 API">
+<meta name="twitter:description" content="框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
+
+每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
+
+接下来我们概述下iOS中关键的网络api以及使用时要注意的：
+  (1).NSURLConnection      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -197,11 +212,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSNetwork-function1" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSNetwork-function3" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/29/iOSNetwork-function1/" class="article-date">
-  	<time datetime="2016-01-29T08:52:00.000Z" itemprop="datePublished">2016-01-29</time>
+      <a href="/2016/02/01/iOSNetwork-function3/" class="article-date">
+  	<time datetime="2016-02-01T06:33:57.000Z" itemprop="datePublished">2016-02-01</time>
 </a>
     </div>
   
@@ -214,7 +229,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      如何更有钱
+      iOS 网络 API
     </h1>
   
 
@@ -230,7 +245,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>测试<del>~</del><del>~</del>~~~<br>思考：    运行循环？<br>     各种关于网络的API？<br>     响应式的网络应用框架？及其应用场景</p>
+        <pre><code>框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
+
+每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
+
+接下来我们概述下iOS中关键的网络api以及使用时要注意的：
+</code></pre><p>  (1).NSURLConnection<br>      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与Web Service交互、获取图片或视频，或者只是简单地得到一个格式化的HTML文档。<br>      它构建在NSStream之上，并且在设计时针对如下4个常见的URI模式进行了优化支持：文件、HTTP、HTTPS与FTP。 虽然NSURLConnection限制了你所能使用的协议，但它对缓存读写的很多底层工作进行了抽象，包括对认证内建支持。并且提供了一个健壮的缓存引擎。<br>      NSURLConnection接口中的内容并不多，它主要依赖于NSURLConnectionDelegate 协议，应用可以凭借后者介入到连接生命周期的很多点上。在默认情况下，NSURLConnection请求是异步的；不过有一个便捷方法可以发送同步请求。同步请求会阻塞调用线程，因此你也需要根据这一点来设计应用。这里简单先了解下NSURLConnection.值得一提的是 AFNetworking3.0版本以前就是构建于NSURLConnection。</p>
+<p>简单了解下URI：在电脑术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对任何（包括本地和互联网）的资源通过特定的协议进行交互操作。URI由包括确定语法和相关协议的方案所定义。<br>Web上可用的每种资源 -HTML文档、图像、视频片段、程序等 - 由一个通用资源标识符（Uniform Resource Identifier, 简称”URI”）进行定位。<br>URI、URL和URN<br>URI ：Uniform Resource Identifier，统一资源标识符；<br>URL：Uniform Resource Locator，统一资源定位符；<br>URN：Uniform Resource Name，统一资源名称。<br>其中，URL,URN是URI的子集。</p>
 
       
     </div>
@@ -240,18 +261,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/02/01/iOSNetwork-function2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          深入理解iOS网络框架
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/01/28/preface/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">前言</div>
+    <a href="/2016/02/01/iOSNetwork-function2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入理解iOS网络框架</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -286,7 +298,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSNetwork-function1" data-title="如何更有钱" data-url="http://yoursite.com/2016/01/29/iOSNetwork-function1/"></div>
+	<div class="ds-thread" data-thread-key="iOSNetwork-function3" data-title="iOS 网络 API" data-url="http://yoursite.com/2016/02/01/iOSNetwork-function3/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

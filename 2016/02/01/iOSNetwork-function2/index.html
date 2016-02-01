@@ -4,17 +4,28 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Jay</title>
+  <title>深入理解iOS网络框架 | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jay">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="Hello,大家好，我们一起来讨论分析下，iOS网络部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.
+  我们通常开发一款与网络有关的iOS应用时候，在潜移默化中已经用到了Objective-c中网络层的组织形式，就像下图一样，每个iOS应用都位于某个网络框架栈之上。
+本人不理解的是上面apps那一行是做什么的？ 有人知道吗？知道的请指点下.
+接下来我们简单看一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解iOS网络框架">
+<meta property="og:url" content="http://yoursite.com/2016/02/01/iOSNetwork-function2/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description">
+<meta property="og:description" content="Hello,大家好，我们一起来讨论分析下，iOS网络部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.
+  我们通常开发一款与网络有关的iOS应用时候，在潜移默化中已经用到了Objective-c中网络层的组织形式，就像下图一样，每个iOS应用都位于某个网络框架栈之上。
+本人不理解的是上面apps那一行是做什么的？ 有人知道吗？知道的请指点下.
+接下来我们简单看一下">
+<meta property="og:image" content="http://jiecoding.github.io/blogImages/networkImage.png">
+<meta property="og:updated_time" content="2016-02-01T07:28:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jay">
-<meta name="twitter:description">
+<meta name="twitter:title" content="深入理解iOS网络框架">
+<meta name="twitter:description" content="Hello,大家好，我们一起来讨论分析下，iOS网络部分，有哪里不明白的，或者有意见的,没有分析到的地方，请在下面评论，我会及时回复.
+  我们通常开发一款与网络有关的iOS应用时候，在潜移默化中已经用到了Objective-c中网络层的组织形式，就像下图一样，每个iOS应用都位于某个网络框架栈之上。
+本人不理解的是上面apps那一行是做什么的？ 有人知道吗？知道的请指点下.
+接下来我们简单看一下">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -196,68 +207,7 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-iOSNetwork-function3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/01/iOSNetwork-function3/" class="article-date">
-  	<time datetime="2016-02-01T06:33:57.000Z" itemprop="datePublished">2016-02-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/01/iOSNetwork-function3/">iOS 网络 API</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
-
-每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
-
-接下来我们概述下iOS中关键的网络api以及使用时要注意的：
-</code></pre><p>  (1).NSURLConnection<br>      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与Web Service交互、获取图片或视频，或者只是简单地得到一个格式化的HTML文档。<br>      它构建在NSStream之上，并且在设计时针对如下4个常见的URI模式进行了优化支持：文件、HTTP、HTTPS与FTP。 虽然NSURLConnection限制了你所能使用的协议，但它对缓存读写的很多底层工作进行了抽象，包括对认证内建支持。并且提供了一个健壮的缓存引擎。<br>      NSURLConnection接口中的内容并不多，它主要依赖于NSURLConnectionDelegate 协议，应用可以凭借后者介入到连接生命周期的很多点上。在默认情况下，NSURLConnection请求是异步的；不过有一个便捷方法可以发送同步请求。同步请求会阻塞调用线程，因此你也需要根据这一点来设计应用。这里简单先了解下NSURLConnection.值得一提的是 AFNetworking3.0版本以前就是构建于NSURLConnection。</p>
-<p>简单了解下URI：在电脑术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对任何（包括本地和互联网）的资源通过特定的协议进行交互操作。URI由包括确定语法和相关协议的方案所定义。<br>Web上可用的每种资源 -HTML文档、图像、视频片段、程序等 - 由一个通用资源标识符（Uniform Resource Identifier, 简称”URI”）进行定位。<br>URI、URL和URN<br>URI ：Uniform Resource Identifier，统一资源标识符；<br>URL：Uniform Resource Locator，统一资源定位符；<br>URN：Uniform Resource Name，统一资源名称。<br>其中，URL,URN是URI的子集。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSNetwork-function2" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSNetwork-function2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2016/02/01/iOSNetwork-function2/" class="article-date">
@@ -273,12 +223,19 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/01/iOSNetwork-function2/">深入理解iOS网络框架</a>
+    <h1 class="article-title" itemprop="name">
+      深入理解iOS网络框架
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -299,196 +256,77 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSNetwork-function1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/29/iOSNetwork-function1/" class="article-date">
-  	<time datetime="2016-01-29T08:52:00.000Z" itemprop="datePublished">2016-01-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+<nav id="article-nav">
+  
+    <a href="/2016/02/01/iOSNetwork-function3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/29/iOSNetwork-function1/">如何更有钱</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>测试<del>~</del><del>~</del>~~~<br>思考：    运行循环？<br>     各种关于网络的API？<br>     响应式的网络应用框架？及其应用场景</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-preface" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/28/preface/" class="article-date">
-  	<time datetime="2016-01-28T12:31:21.000Z" itemprop="datePublished">2016-01-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          iOS 网络 API
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/28/preface/">前言</a>
-    </h1>
   
+    <a href="/2016/01/29/iOSNetwork-function1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">如何更有钱</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果生活总是不如你意，那是因为<br>你还没有阅读本人的博客</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
 
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
 
 
 
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/28/hello-world/" class="article-date">
-  	<time datetime="2016-01-28T10:56:27.000Z" itemprop="datePublished">2016-01-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/28/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOSNetwork-function2" data-title="深入理解iOS网络框架" data-url="http://yoursite.com/2016/02/01/iOSNetwork-function2/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-
-
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -512,8 +350,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
