@@ -4,17 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives | Jay</title>
+  <title>NSStream&lt;三&gt; | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jay">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。
+
+
+NSStream提供的额外控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSStream<三>">
+<meta property="og:url" content="http://yoursite.com/2016/02/02/iOSNetwork-function4/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description">
+<meta property="og:description" content="NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。
+
+
+NSStream提供的额外控制">
+<meta property="og:updated_time" content="2016-02-02T01:31:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jay">
-<meta name="twitter:description">
+<meta name="twitter:title" content="NSStream<三>">
+<meta name="twitter:description" content="NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。
+
+
+NSStream提供的额外控制">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -196,184 +206,109 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-iOSNetwork-function4" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2016/02/02/iOSNetwork-function4/" class="article-date">
+  	<time datetime="2016-02-02T01:20:30.000Z" itemprop="datePublished">2016-02-02</time>
+</a>
+    </div>
   
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NSStream&lt;三&gt;
+    </h1>
+  
+
+      </header>
       
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/02/iOSNetwork-function4/" class="archive-article-date">
-  	<time datetime="2016-02-02T01:20:30.000Z" itemprop="datePublished">Feb 2</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/02/iOSNetwork-function4/">NSStream&lt;三&gt;</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+NSStream提供的额外控制是有代价的。它并没有提供对处理HTTP/S响应状态码或认证的内建支持。它所发出与接收的数据都位于C缓冲中，Objective-C开发者对此可能不大熟悉。它还无法管理多个外发请求，需要子类化才能添加这个特性。NSStream是异步的，通过NSStreamDelegate实现通信更新。
+</code></pre><p>关于底层网络的实现有待补充…</p>
+
+      
+    </div>
+    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/02/01/iOSNetwork-function3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS 网络 API &lt;二&gt;</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/01/iOSNetwork-function3/" class="archive-article-date">
-  	<time datetime="2016-02-01T06:33:57.000Z" itemprop="datePublished">Feb 1</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/01/iOSNetwork-function3/">iOS 网络 API &lt;二&gt;</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/01/iOSNetwork-function2/" class="archive-article-date">
-  	<time datetime="2016-02-01T05:00:30.000Z" itemprop="datePublished">Feb 1</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/01/iOSNetwork-function2/">深入理解iOS网络框架 &lt;一&gt;</a>
-    </h1>
-  
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/29/iOSNetwork-function1/" class="archive-article-date">
-  	<time datetime="2016-01-29T08:52:00.000Z" itemprop="datePublished">Jan 29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/29/iOSNetwork-function1/">如何更有钱</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/28/preface/" class="archive-article-date">
-  	<time datetime="2016-01-28T12:31:21.000Z" itemprop="datePublished">Jan 28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/28/preface/">前言</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/28/hello-world/" class="archive-article-date">
-  	<time datetime="2016-01-28T10:56:27.000Z" itemprop="datePublished">Jan 28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/28/hello-world/">Hello World</a>
-    </h1>
-  
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOSNetwork-function4" data-title="NSStream&lt;三&gt;" data-url="http://yoursite.com/2016/02/02/iOSNetwork-function4/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
 
 </div>
       <footer id="footer">
@@ -399,8 +334,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
