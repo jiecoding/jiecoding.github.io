@@ -22,7 +22,7 @@
 多态:可以用指针来实现。
 具体可参照: C语言例子 C语言例子
 引用总结一句话:面向对象从来">
-<meta property="og:updated_time" content="2016-02-03T05:35:44.000Z">
+<meta property="og:updated_time" content="2016-02-03T06:05:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-c如何在C基础上实现面向对象">
 <meta name="twitter:description" content="这里说一下Swift也是基于C和Objective-C，而却没有C的一些兼容约束，关于swift以后的文章还会说，现在先来看看Objective-c如何在C基础上实现面向对象？
@@ -251,6 +251,7 @@
 <p>多态:可以用指针来实现。</p>
 <p>具体可参照:<br> <a href="http://blog.csdn.net/songcdut/article/details/8132609" target="_blank" rel="external">C语言例子</a><br> <a href="http://blog.csdn.net/kennyrose/article/details/7564105" target="_blank" rel="external">C语言例子</a></p>
 <p>引用总结一句话:面向对象从来都是思想，而不是语言! 理解面向对象的编程思想，我们使用C语言这样的较低级的语言也同样可以实现OOP。像c语言用的里面具体用到的有C语言中的宏，结构体，函数指针, 聚合组合等知识。</p>
+<p>接下来我们看看objective-c到底是怎么把c给做到面向对象的：<br>虽然Objective-C是C的超集，但它不视C的基本类型为第一级的对象。bjective-C是扩充C的面向对象编程语言。<br>Objective-C是非常实用的语言。它是一个用C写成、很小的运行库，令应用程序的尺寸增加很小，和大部分OO系统使用极大的VM执行时间会取代了整个系统的运作相反。Objective-C写成的程序通常不会比其原始码大很多。而其函式库(通常没附在软件发行本)亦和Smalltalk系统要使用极大的内存来开启一个窗口的情况相反。因此，Objective-C它完全兼容标准C语言（C++对C语言的兼容仅在于大部分语法上，而在ABI（Application Binary Interface）上，还需要使用extern “C”这种显式声明来与C函数进行兼容），而在此基础上增加了面向对象编程语言的特性以及Smalltalk消息机制。<br>我自己的理解呢就是把C语言写成了一个面向对象思想的运行库，产生objective-c这样的语言。是不是很有意思？多多思考，饮水思源.C语言还是相当重要的，只不过我们平时开发的一些东西，用不到这些细节而已！但是这些东西还是有必要去明白的，因为个人感觉它们才是不变的东西。如果有一天遇到比较庞大的用户量，对细节要求比较严格的时候，它们就可以灵活运用，来实现底层的一些东西，这样对自己的实现某些功能会更加灵活。想想都觉得有魅力，激动啊！  以上只是个人理解，如果有不对的请批评指出，有不同的意见可以提出来一起讨论检验!</p>
 
       
     </div>
