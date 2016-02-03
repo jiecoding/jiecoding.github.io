@@ -224,7 +224,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>CFNetwork API位于基础的 BSD socket之上，用在NSStream. URL 加载系统、Bonjour与GameKit,API的实现中.它为HTTP与FTP等高级协议提供了原生支持.CFNetwork与BSD socket之间的主要差别在于运行循环集成.如果应用使用了CFNetwork。那么输入和输出实践都会在线程的运行循环中进行调度。如果输入与输出事件发生在辅助线程中，就需要以恰当的模式开始运行循环。<br>CFNetwork比URL加载系统提供了更多的配置选项,这个结果是喜忧参半，在使用CFNetwork创建HTTP请求时可用使用这些配置选项。在创建请求时，需要手工将与请求，一同发送的HTTP头和Cookie信息添加进去。但对于NSURLConnection来说，标准的头与Cookie信息会被自动添加进去。<br>CFNetwork基本设施构建在Core Foundation层的CFSocket与CFStream API之上。CFNetwork包含了针对特定协议的API，比如用于与FTP服务器通信的CFFTP、用于发送和接收HTTP消息的CFHTTP、用于发布与浏览Bonjour服务的CFNetwork等</p>
+
       
     </div>
     
