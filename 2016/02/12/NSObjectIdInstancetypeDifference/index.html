@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>NSObject和id以及Instancetype的区别 | Jay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSObject和id以及Instancetype的区别">
+<meta property="og:url" content="http://yoursite.com/2016/02/12/NSObjectIdInstancetypeDifference/index.html">
+<meta property="og:site_name" content="Jay">
+<meta property="og:description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
+<meta property="og:updated_time" content="2016-02-12T16:35:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NSObject和id以及Instancetype的区别">
+<meta name="twitter:description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
+  
+    <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://jiecoding.github.io/img/ppig.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Jay&#39;s smile</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>關於</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Jay&#39;s smile</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://jiecoding.github.io/img/ppig.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Jay&#39;s smile</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-NSObjectIdInstancetypeDifference" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/12/NSObjectIdInstancetypeDifference/" class="article-date">
+  	<time datetime="2016-02-12T14:30:58.000Z" itemprop="datePublished">2016-02-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NSObject和id以及Instancetype的区别
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
+<p>接下来我们就来看看NSObject和id以及Instancetype的区别：</p>
+<p>我们先来说说id吧</p>
+<p>id类型被称之为 万能指针，可以用于任何类型的对象。</p>
+<p>id 是Objective-C中的一个特殊的数据类型，还有nil、Nil、SEL…</p>
+<p>他们中的大多数都可以在/usr/include/objc/objc.h或者这个目录中的其他头文件中找到。</p>
+<p>id 我们经常看到运用的地方莫过于</p>
+<p>@property (nonatomic, weak, nullable) id <uitableviewdelegate> delegate;</uitableviewdelegate></p>
+<p>这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.</p>
+<p>委托是一种设计模式，是一种设计思想。委托经常依赖协议来实现。</p>
+<p>因为我们通常设计一个类的delegate时候，没有办法确定是什么对象来做delegate，所以用id，表示任何对象都可以，这种不能确定类型的需求还是蛮多的,比如有的数组内容类型不一样，进行遍历的时候等。</p>
+<p>这里也就体现了动态类型id.</p>
+<p>可以在代码运行时判断对象的类型。使用id类型(又称强类型)可以在运行的时候使用任何数据类型来替换。动态类型让程序更加灵活，但会使数据的统一性降低。我们常用的静态类型如NSString等是有着自己的优势的，使用静态类型编译器可以完全分析代码的性能，可预知性更高。</p>
+<p><a href="http://www.tekuba.net/program/278/" target="_blank" rel="external">http://www.tekuba.net/program/278/</a></p>
+<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
+<p><a href="http://www.mamicode.com/info-detail-649183.html" target="_blank" rel="external">http://www.mamicode.com/info-detail-649183.html</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7aa21f320100quho.html</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html</a></p>
+<p><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">http://blog.csdn.net/lonelyroamer/article/details/7711895</a></p>
+<p><a href="http://www.zhihu.com/question/20016551" target="_blank" rel="external">http://www.zhihu.com/question/20016551</a></p>
+<p><a href="http://blog.csdn.net/linjinxing/article/details/9994903" target="_blank" rel="external">http://blog.csdn.net/linjinxing/article/details/9994903</a></p>
+<p><a href="http://www.tuicool.com/articles/Vb2YvqY" target="_blank" rel="external">http://www.tuicool.com/articles/Vb2YvqY</a></p>
+<p><a href="http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html" target="_blank" rel="external">http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html</a></p>
+<p><a href="http://mikixiyou.iteye.com/blog/1743868" target="_blank" rel="external">http://mikixiyou.iteye.com/blog/1743868</a></p>
+<p><a href="http://www.linuxidc.com/Linux/2012-07/64453.htm" target="_blank" rel="external">http://www.linuxidc.com/Linux/2012-07/64453.htm</a></p>
+<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
+<p><a href="http://zhidao.baidu.com/link?url=VdhrBbwb79wu__r1PSjvvZ5IutSlDhWBgjxzJGTMY_jra857-laPKveQfoumiNFZSixYvfzz04tIqFcyI-rimqHNwzG9WzhQuEIyP3AaSBu" target="_blank" rel="external">http://zhidao.baidu.com/link?url=VdhrBbwb79wu__r1PSjvvZ5IutSlDhWBgjxzJGTMY_jra857-laPKveQfoumiNFZSixYvfzz04tIqFcyI-rimqHNwzG9WzhQuEIyP3AaSBu</a></p>
+<p><a href="http://www.baidu.com/s?wd=ios%E4%BD%BF%E7%94%A8id%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E7%82%B9&amp;s2bd=t&amp;tn=84053098_dg&amp;ie=utf-8" target="_blank" rel="external">http://www.baidu.com/s?wd=ios%E4%BD%BF%E7%94%A8id%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E7%82%B9&amp;s2bd=t&amp;tn=84053098_dg&amp;ie=utf-8</a></p>
+<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
+<p><a href="http://www.xcoder.cn/html/2013/objc_0621/11545.html" target="_blank" rel="external">http://www.xcoder.cn/html/2013/objc_0621/11545.html</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7aa21f320100quho.html</a></p>
+<p><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">http://blog.csdn.net/lonelyroamer/article/details/7711895</a></p>
+<p><a href="http://www.tuicool.com/articles/jANrmq" target="_blank" rel="external">http://www.tuicool.com/articles/jANrmq</a></p>
+<p><a href="http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html" target="_blank" rel="external">http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html</a></p>
+<p><a href="http://zhidao.baidu.com/link?url=7ABTSrCQ9TajBBlp8Pc380RCikiMlDLQ2qnB4HDodAKK5L7nueeQcm9I0oHjlkacLsRVQvk6OaXgydStbH0phK" target="_blank" rel="external">http://zhidao.baidu.com/link?url=7ABTSrCQ9TajBBlp8Pc380RCikiMlDLQ2qnB4HDodAKK5L7nueeQcm9I0oHjlkacLsRVQvk6OaXgydStbH0phK</a></p>
+<p><a href="http://bbs.itheima.com/thread-209812-1-1.html" target="_blank" rel="external">http://bbs.itheima.com/thread-209812-1-1.html</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/02/12/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="NSObjectIdInstancetypeDifference" data-title="NSObject和id以及Instancetype的区别" data-url="http://yoursite.com/2016/02/12/NSObjectIdInstancetypeDifference/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Jay&#39;s smile
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
