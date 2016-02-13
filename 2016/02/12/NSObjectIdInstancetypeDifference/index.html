@@ -4,18 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>NSObject和id以及Instancetype的区别 | Jay</title>
+  <title>NSObject和id的区别以及Instancetype、id&lt;NSObject&gt; | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
+  <meta name="description" content="id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。
+它可以指向的类型不仅限于NSObject
+id 我们经常看到运用的地方莫过于
+@property (nonatomic, weak, nullable) id  delegate;
+这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.(delegate委托是一种设计模式，是一种设计">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NSObject和id以及Instancetype的区别">
+<meta property="og:title" content="NSObject和id的区别以及Instancetype、id<NSObject>">
 <meta property="og:url" content="http://yoursite.com/2016/02/12/NSObjectIdInstancetypeDifference/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
-<meta property="og:updated_time" content="2016-02-12T16:35:42.000Z">
+<meta property="og:description" content="id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。
+它可以指向的类型不仅限于NSObject
+id 我们经常看到运用的地方莫过于
+@property (nonatomic, weak, nullable) id  delegate;
+这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.(delegate委托是一种设计模式，是一种设计">
+<meta property="og:updated_time" content="2016-02-13T09:14:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NSObject和id以及Instancetype的区别">
-<meta name="twitter:description" content="像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜">
+<meta name="twitter:title" content="NSObject和id的区别以及Instancetype、id<NSObject>">
+<meta name="twitter:description" content="id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。
+它可以指向的类型不仅限于NSObject
+id 我们经常看到运用的地方莫过于
+@property (nonatomic, weak, nullable) id  delegate;
+这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.(delegate委托是一种设计模式，是一种设计">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -214,7 +226,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      NSObject和id以及Instancetype的区别
+      NSObject和id的区别以及Instancetype、id&lt;NSObject&gt;
     </h1>
   
 
@@ -230,43 +242,47 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
-<p>接下来我们就来看看NSObject和id以及Instancetype的区别：</p>
-<p>我们先来说说id吧</p>
-<p>id类型被称之为 万能指针，可以用于任何类型的对象。</p>
-<p>id 是Objective-C中的一个特殊的数据类型，还有nil、Nil、SEL…</p>
-<p>他们中的大多数都可以在/usr/include/objc/objc.h或者这个目录中的其他头文件中找到。</p>
+        <p>id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。</p>
+<p>它可以指向的类型不仅限于NSObject</p>
 <p>id 我们经常看到运用的地方莫过于</p>
 <p>@property (nonatomic, weak, nullable) id <uitableviewdelegate> delegate;</uitableviewdelegate></p>
-<p>这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.</p>
-<p>委托是一种设计模式，是一种设计思想。委托经常依赖协议来实现。</p>
+<p>这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.(delegate委托是一种设计模式，是一种设计思想。委托经常依赖协议来实现)</p>
 <p>因为我们通常设计一个类的delegate时候，没有办法确定是什么对象来做delegate，所以用id，表示任何对象都可以，这种不能确定类型的需求还是蛮多的,比如有的数组内容类型不一样，进行遍历的时候等。</p>
-<p>这里也就体现了动态类型id.</p>
-<p>可以在代码运行时判断对象的类型。使用id类型(又称强类型)可以在运行的时候使用任何数据类型来替换。动态类型让程序更加灵活，但会使数据的统一性降低。我们常用的静态类型如NSString等是有着自己的优势的，使用静态类型编译器可以完全分析代码的性能，可预知性更高。</p>
-<p><a href="http://www.tekuba.net/program/278/" target="_blank" rel="external">http://www.tekuba.net/program/278/</a></p>
-<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
-<p><a href="http://www.mamicode.com/info-detail-649183.html" target="_blank" rel="external">http://www.mamicode.com/info-detail-649183.html</a></p>
-<p><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7aa21f320100quho.html</a></p>
-<p><a href="http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html</a></p>
-<p><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">http://blog.csdn.net/lonelyroamer/article/details/7711895</a></p>
-<p><a href="http://www.zhihu.com/question/20016551" target="_blank" rel="external">http://www.zhihu.com/question/20016551</a></p>
-<p><a href="http://blog.csdn.net/linjinxing/article/details/9994903" target="_blank" rel="external">http://blog.csdn.net/linjinxing/article/details/9994903</a></p>
-<p><a href="http://www.tuicool.com/articles/Vb2YvqY" target="_blank" rel="external">http://www.tuicool.com/articles/Vb2YvqY</a></p>
-<p><a href="http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html" target="_blank" rel="external">http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html</a></p>
-<p><a href="http://mikixiyou.iteye.com/blog/1743868" target="_blank" rel="external">http://mikixiyou.iteye.com/blog/1743868</a></p>
-<p><a href="http://www.linuxidc.com/Linux/2012-07/64453.htm" target="_blank" rel="external">http://www.linuxidc.com/Linux/2012-07/64453.htm</a></p>
-<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
-<p><a href="http://zhidao.baidu.com/link?url=VdhrBbwb79wu__r1PSjvvZ5IutSlDhWBgjxzJGTMY_jra857-laPKveQfoumiNFZSixYvfzz04tIqFcyI-rimqHNwzG9WzhQuEIyP3AaSBu" target="_blank" rel="external">http://zhidao.baidu.com/link?url=VdhrBbwb79wu__r1PSjvvZ5IutSlDhWBgjxzJGTMY_jra857-laPKveQfoumiNFZSixYvfzz04tIqFcyI-rimqHNwzG9WzhQuEIyP3AaSBu</a></p>
-<p><a href="http://www.baidu.com/s?wd=ios%E4%BD%BF%E7%94%A8id%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E7%82%B9&amp;s2bd=t&amp;tn=84053098_dg&amp;ie=utf-8" target="_blank" rel="external">http://www.baidu.com/s?wd=ios%E4%BD%BF%E7%94%A8id%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E7%82%B9&amp;s2bd=t&amp;tn=84053098_dg&amp;ie=utf-8</a></p>
-<p><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
-<p><a href="http://www.xcoder.cn/html/2013/objc_0621/11545.html" target="_blank" rel="external">http://www.xcoder.cn/html/2013/objc_0621/11545.html</a></p>
-<p><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7aa21f320100quho.html</a></p>
-<p><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">http://blog.csdn.net/lonelyroamer/article/details/7711895</a></p>
-<p><a href="http://www.tuicool.com/articles/jANrmq" target="_blank" rel="external">http://www.tuicool.com/articles/jANrmq</a></p>
-<p><a href="http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html" target="_blank" rel="external">http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html</a></p>
-<p><a href="http://zhidao.baidu.com/link?url=7ABTSrCQ9TajBBlp8Pc380RCikiMlDLQ2qnB4HDodAKK5L7nueeQcm9I0oHjlkacLsRVQvk6OaXgydStbH0phK" target="_blank" rel="external">http://zhidao.baidu.com/link?url=7ABTSrCQ9TajBBlp8Pc380RCikiMlDLQ2qnB4HDodAKK5L7nueeQcm9I0oHjlkacLsRVQvk6OaXgydStbH0phK</a></p>
-<p><a href="http://bbs.itheima.com/thread-209812-1-1.html" target="_blank" rel="external">http://bbs.itheima.com/thread-209812-1-1.html</a></p>
-<p><a href="http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html</a></p>
+<p>这里也就体现了动态类型id.可以在代码运行时判断对象的类型。</p>
+<p>使用id类型(又称强类型)可以在运行的时候使用任何数据类型来替换。动态类型让程序更加灵活，但会使数据的统一性降低。我们常用的静态类型如NSString等是有着自己的优势的，使用静态类型编译器可以完全分析代码的性能，可预知性更高。</p>
+<p>编译器看到id以后，认为是动态类型，不在检查类型</p>
+<p>注意的是id 是一个指针，所以在使用id的时候不需要加星号，比如，<br>id foo=nil; </p>
+<p>上述语句定义了一个nil 指针，这个指针指向NSObject 的任意一个子类。</p>
+<p>而“id *foo=nil;”则定义了一个指针，这个指针指向另一个指针，被指向的这个指针指向NSObject的一个子类。</p>
+<p>id 是Objective-C中的一个特殊的数据类型，还有nil、Nil、SEL…</p>
+<p>他们中的大多数都可以在/usr/include/objc/objc.h或者这个目录中的其他头文件中找到。</p>
+<p>typedef struct objc_class <em>Class;<br>typedef struct objc_object {<br>    Class isa;<br>} </em>id;</p>
+<p>接下来看下NSObject，NSObject <em> 本身就是定义指向NSObject类型的指针.<br>NSObject</em>就是 NSObject类型的指针了，它范围较小。<br>NSObject对象会惊醒编译时检查（需要强制类型转换）</p>
+<p>然后让我们来看看id 与 NSObject 区别：<br>1，id关键字在编译时不被检查，而NSObject在编译时会被检查是否被调用一些错误方法。<br>2，id可以是任何对象，包括非NSObject对象<br>3，定义id的时候不使用*，NSObject却需要。<br>我的理解，基本上来讲，定义id类似于定义了一个地址（只有指针，抽象指针），而NSObject是确实的定义了一个逻辑对象的地址。</p>
+<p>最后我们看下 instancetype 和它与id异同</p>
+<p>相同点<br>        都可以作为方法的返回类型<br>不同点<br>        1）instancetype可以返回和方法所在类型相同的对象，id只能返回位置类型的对象<br>        2）instancetype只能作为返回值，不能像id那样作为参数 </p>
+<p>Object-C 类，对象，运行时，isa<br><a href="http://blog.sina.com.cn/s/blog_7a2ffd5c01010nme.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7a2ffd5c01010nme.html</a></p>
+<p>动态类型 动态绑定 动态载入 SEL类型:<br><a href="http://www.tekuba.net/program/278/" target="_blank" rel="external">http://www.tekuba.net/program/278/</a></p>
+<p>Objective-C中的id这种数据类型存在的价值是什么？：<br><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
+<p>iOS数据类型:<br><a href="http://www.mamicode.com/info-detail-649183.html" target="_blank" rel="external">http://www.mamicode.com/info-detail-649183.html</a></p>
+<p>Objective-C id 数据类型:<br><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7aa21f320100quho.html</a></p>
+<p>Objective-C中的一些特殊的数据类型 id、nil、Nil、SEL:<br><a href="http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html</a></p>
+<p>Objective-C中的id类型:<br><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">http://blog.csdn.net/lonelyroamer/article/details/7711895</a></p>
+<p>如何才能系统的学习 iOS 开发，理解一些规则和深层次的机制原理？<br><a href="http://www.zhihu.com/question/20016551" target="_blank" rel="external">http://www.zhihu.com/question/20016551</a></p>
+<p>iOS开发中很重要，很常用，但却容易被忽略的知识点：id ,NSObject, id<nsobject>区别<br><a href="http://blog.csdn.net/linjinxing/article/details/9994903" target="_blank" rel="external">http://blog.csdn.net/linjinxing/article/details/9994903</a></nsobject></p>
+<p>第一次接触OC多态，动态类型与动态绑定 - 小四也软开<br><a href="http://www.tuicool.com/articles/Vb2YvqY" target="_blank" rel="external">http://www.tuicool.com/articles/Vb2YvqY</a></p>
+<p>C语言基本数据类型简介<br><a href="http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html" target="_blank" rel="external">http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html</a></p>
+<p>Objective-C的内省(Introspection)机制小结<br>明智地使用内省可以使面向对象的程序更加高效和强壮。<br>它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。<br><a href="http://mikixiyou.iteye.com/blog/1743868" target="_blank" rel="external">http://mikixiyou.iteye.com/blog/1743868</a></p>
+<p>Objective-C语法之动态类型(isKindOfClass, isMemberOfClass,id)等<br>对象在运行时获取其类型的能力称为内省。内省可以有多种方法实现。<br><a href="http://www.linuxidc.com/Linux/2012-07/64453.htm" target="_blank" rel="external">http://www.linuxidc.com/Linux/2012-07/64453.htm</a></p>
+<p>在C++中我们知道void*是一个万能指针，或者是叫通用对象，<br>那么在OC中也有这样一个类似作业的通用对象，叫做id，id是OC中的万能指针，它可以指向任何类型的对象。<br>如果receiver是id类型，在运行之前编译器是不会给出警告的,因为编译器不知道id中是什么类型，<br>当程序运行时id中保存对象类型确定，这个时候id的类型也就是消息这个对象的类型。<br>要是对象所属类中没找到这个类型，运行时程序会有问题<br>比如说<br>传递给id的类型是A类型，要是这个类中没有A类型，那么这个程序就会有问题。</p>
+<p>Objective-C学习之动态绑定和id类型<br><a href="http://www.xcoder.cn/html/2013/objc_0621/11545.html" target="_blank" rel="external">http://www.xcoder.cn/html/2013/objc_0621/11545.html</a></p>
+<p>id和NSObject *和instanceType的区别与联系 - 顺子为王<br><a href="http://www.tuicool.com/articles/jANrmq" target="_blank" rel="external">http://www.tuicool.com/articles/jANrmq</a></p>
+<p>iOS中id与NSObject* 和id<nsobject>的区别<br><a href="http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html" target="_blank" rel="external">http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html</a></nsobject></p>
+<p>id类型的使用与NSObject区别<br><a href="http://bbs.itheima.com/thread-209812-1-1.html" target="_blank" rel="external">http://bbs.itheima.com/thread-209812-1-1.html</a></p>
+<p>id 与 NSObject 区别<br><a href="http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html</a></p>
+<p>强类型语言和弱类型语言<br><a href="http://blog.sina.com.cn/s/blog_9dc987e50101brwi.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_9dc987e50101brwi.html</a></p>
+<p>instancetype、id、NSObject的区别<br><a href="http://www.tuicool.com/articles/NZbaQza" target="_blank" rel="external">http://www.tuicool.com/articles/NZbaQza</a></p>
+<p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
 
       
     </div>
@@ -277,8 +293,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2016/02/12/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2016/02/03/ThinkOC-OOP/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Objective-c如何在C基础上实现面向对象</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -313,7 +329,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="NSObjectIdInstancetypeDifference" data-title="NSObject和id以及Instancetype的区别" data-url="http://yoursite.com/2016/02/12/NSObjectIdInstancetypeDifference/"></div>
+	<div class="ds-thread" data-thread-key="NSObjectIdInstancetypeDifference" data-title="NSObject和id的区别以及Instancetype、id&lt;NSObject&gt;" data-url="http://yoursite.com/2016/02/12/NSObjectIdInstancetypeDifference/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
