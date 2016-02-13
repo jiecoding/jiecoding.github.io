@@ -30,7 +30,7 @@ id foo3;
 它可以指向的类型不仅限于NSObject
 id 我们经常看到运用的地方莫过于
 @property (nonatomic, weak, nu">
-<meta property="og:updated_time" content="2016-02-13T09:51:38.000Z">
+<meta property="og:updated_time" content="2016-02-13T09:57:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NSObject和id的区别以及Instancetype、id<NSObject>">
 <meta name="twitter:description" content="我们来分析下这三种定义的各自含义和区别 以及最后说到id返回类型都写成Instancetype的好处:
@@ -280,7 +280,7 @@ id 我们经常看到运用的地方莫过于
 <p>typedef struct objc_class <em>Class;<br>typedef struct objc_object {<br>    Class isa;<br>} </em>id;</p>
 <p>(2) NSObject，NSObject <em> 本身就是定义指向NSObject类型的指针.<br>NSObject</em>就是 NSObject类型的指针了，它范围较小。<br>NSObject对象会惊醒编译时检查（需要强制类型转换）</p>
 <p>(3) 然后让我们来总结下id 与 NSObject 区别：<br>从编译时来看:<br>1，id关键字在编译时不被检查，而NSObject在编译时会被检查是否被调用一些错误方法。<br>从范围上来看：<br>2，id可以是任何对象，包括非NSObject对象<br>从定义上来看：<br>3，定义id的时候不使用*，NSObject却需要。<br>我的理解，基本上来讲，定义id类似于定义了一个地址（只有指针，抽象指针），而NSObject是确实的定义了一个逻辑对象的地址。</p>
-<p>(4).id<nsobject><br>   id<nsobject>告诉编译器，你不关心对象是什么类型，但它必须遵守NSObject协议(protocol)，编译器就能保证所有赋值给id<nsobject>类型的对象都遵守NSObject协议(protocol)。这样的指针可以指向任何NSObject对象，因为NSObject对象遵守NSObject协议(protocol)，而且，它也可以用来保存NSProxy对象，因为它也遵守NSObject协议(protocol)。这是非常强大，方便且灵活，你不用关心对象是什么类型，而只关心它实现了哪些方法。</nsobject></nsobject></nsobject></p>
+<p>(4).id&amp;ltNSObject&amp;apm<br>   id<nsobject>告诉编译器，你不关心对象是什么类型，但它必须遵守NSObject协议(protocol)，编译器就能保证所有赋值给id<nsobject>类型的对象都遵守NSObject协议(protocol)。这样的指针可以指向任何NSObject对象，因为NSObject对象遵守NSObject协议(protocol)，而且，它也可以用来保存NSProxy对象，因为它也遵守NSObject协议(protocol)。这是非常强大，方便且灵活，你不用关心对象是什么类型，而只关心它实现了哪些方法。</nsobject></nsobject></p>
 <p>(5)instancetype</p>
 <p>instancetype是clang 3.5开始，clang提供的一个关键字，表示某个方法返回的未知类型的Objective-C对象。我们都知道未知类型的的对象可以用id关键字表示，那为什么还会再有一个instancetype呢？</p>
 <p>instancetype 是一个关键字，它只能用来定义OC方法的返回值类型。</p>
