@@ -224,7 +224,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。</p>
+        <p>我们来分析下这三种定义的各自含义和区别 以及最后说到id返回类型都写成Instancetype的好处:</p>
+<ol>
+<li>id foo1;</li>
+<li>NSObject *foo2;</li>
+<li>id<nsobject> foo3;</nsobject></li>
+</ol>
+<p>(1) id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。</p>
 <p>它可以指向的类型不仅限于NSObject</p>
 <p>id 我们经常看到运用的地方莫过于</p>
 <p>@property (nonatomic, weak, nullable) id <uitableviewdelegate> delegate;</uitableviewdelegate></p>
@@ -239,10 +245,20 @@
 <p>id 是Objective-C中的一个特殊的数据类型，还有nil、Nil、SEL…</p>
 <p>他们中的大多数都可以在/usr/include/objc/objc.h或者这个目录中的其他头文件中找到。</p>
 <p>typedef struct objc_class <em>Class;<br>typedef struct objc_object {<br>    Class isa;<br>} </em>id;</p>
-<p>接下来看下NSObject，NSObject <em> 本身就是定义指向NSObject类型的指针.<br>NSObject</em>就是 NSObject类型的指针了，它范围较小。<br>NSObject对象会惊醒编译时检查（需要强制类型转换）</p>
-<p>然后让我们来看看id 与 NSObject 区别：<br>1，id关键字在编译时不被检查，而NSObject在编译时会被检查是否被调用一些错误方法。<br>2，id可以是任何对象，包括非NSObject对象<br>3，定义id的时候不使用*，NSObject却需要。<br>我的理解，基本上来讲，定义id类似于定义了一个地址（只有指针，抽象指针），而NSObject是确实的定义了一个逻辑对象的地址。</p>
-<p>最后我们看下 instancetype 和它与id异同</p>
-<p>相同点<br>        都可以作为方法的返回类型<br>不同点<br>        1）instancetype可以返回和方法所在类型相同的对象，id只能返回位置类型的对象<br>        2）instancetype只能作为返回值，不能像id那样作为参数 </p>
+<p>(2) NSObject，NSObject <em> 本身就是定义指向NSObject类型的指针.<br>NSObject</em>就是 NSObject类型的指针了，它范围较小。<br>NSObject对象会惊醒编译时检查（需要强制类型转换）</p>
+<p>(3) 然后让我们来总结下id 与 NSObject 区别：<br>从编译时来看:<br>1，id关键字在编译时不被检查，而NSObject在编译时会被检查是否被调用一些错误方法。<br>从范围上来看：<br>2，id可以是任何对象，包括非NSObject对象<br>从定义上来看：<br>3，定义id的时候不使用*，NSObject却需要。<br>我的理解，基本上来讲，定义id类似于定义了一个地址（只有指针，抽象指针），而NSObject是确实的定义了一个逻辑对象的地址。</p>
+<p>(4).id<nsobject><br>   id<nsobject>告诉编译器，你不关心对象是什么类型，但它必须遵守NSObject协议(protocol)，编译器就能保证所有赋值给id<nsobject>类型的对象都遵守NSObject协议(protocol)。这样的指针可以指向任何NSObject对象，因为NSObject对象遵守NSObject协议(protocol)，而且，它也可以用来保存NSProxy对象，因为它也遵守NSObject协议(protocol)。这是非常强大，方便且灵活，你不用关心对象是什么类型，而只关心它实现了哪些方法。</nsobject></nsobject></nsobject></p>
+<p>(5)instancetype</p>
+<p>instancetype是clang 3.5开始，clang提供的一个关键字，表示某个方法返回的未知类型的Objective-C对象。我们都知道未知类型的的对象可以用id关键字表示，那为什么还会再有一个instancetype呢？</p>
+<p>instancetype 是一个关键字，它只能用来定义OC方法的返回值类型。</p>
+<p>使用 instancetype 编译器和IDE 会做类型检查，而id不会做完整的类型检查。</p>
+<p>用instancetype代替id作返回类型有什么好处<br>1、明确性。代码只做你让它做的事，而不是其他。<br>2、程式化。你会养成好习惯，这些习惯在某些时候会很有用，而且肯定有用武之地。<br>3、一致性。让代码可读性更好。<br><a href="http://zhidao.baidu.com/link?url=xIZ09neuu_V5NbNES_WFrazzWTkB32wdSEPNWUbTSTe-SdTdsbdcS0wvZIToPg_evGCJYQv6L_AqQhuOm1ZjDscmuRQqiywypKyB139rySe" target="_blank" rel="external">http://zhidao.baidu.com/link?url=xIZ09neuu_V5NbNES_WFrazzWTkB32wdSEPNWUbTSTe-SdTdsbdcS0wvZIToPg_evGCJYQv6L_AqQhuOm1ZjDscmuRQqiywypKyB139rySe</a></p>
+<p><a href="http://www.th7.cn/Program/IOS/201404/191629.shtml" target="_blank" rel="external">http://www.th7.cn/Program/IOS/201404/191629.shtml</a></p>
+<p><a href="http://blog.csdn.net/yongyinmg/article/details/43668567" target="_blank" rel="external">http://blog.csdn.net/yongyinmg/article/details/43668567</a></p>
+<p>它和id比较：</p>
+<p>相同点<br>        都可以作为方法的返回类型<br>不同点<br>    1) instancetype可以返回和方法所在类相同类型的对象，id只能返回未知类型的对象；</p>
+<pre><code>2）instancetype只能作为返回值，不能像id那样作为参数 
+</code></pre><p>总结：instancetype更加智能,编译器知道要返回什么类型,而id则不能,所以以后尽量用 instancetype</p>
 <p>Object-C 类，对象，运行时，isa<br><a href="http://blog.sina.com.cn/s/blog_7a2ffd5c01010nme.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7a2ffd5c01010nme.html</a></p>
 <p>动态类型 动态绑定 动态载入 SEL类型:<br><a href="http://www.tekuba.net/program/278/" target="_blank" rel="external">http://www.tekuba.net/program/278/</a></p>
 <p>Objective-C中的id这种数据类型存在的价值是什么？：<br><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">http://www.zhihu.com/question/22814649</a></p>
@@ -264,7 +280,8 @@
 <p>id 与 NSObject 区别<br><a href="http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html</a></p>
 <p>强类型语言和弱类型语言<br><a href="http://blog.sina.com.cn/s/blog_9dc987e50101brwi.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_9dc987e50101brwi.html</a></p>
 <p>instancetype、id、NSObject的区别<br><a href="http://www.tuicool.com/articles/NZbaQza" target="_blank" rel="external">http://www.tuicool.com/articles/NZbaQza</a></p>
-<p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
+<p>instancetype<br><a href="http://www.bkjia.com/IOSjc/733043.html" target="_blank" rel="external">http://www.bkjia.com/IOSjc/733043.html</a></p>
+<p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，没有使用次数多的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
 
       
     </div>
