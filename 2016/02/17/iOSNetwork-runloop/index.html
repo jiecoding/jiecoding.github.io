@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>runloop运行循环精致介绍 | Jay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="运行循环是由类NSRunLoop表示的，一个线程一次只能执行一个任务，执行完成后线程就会退出。
+有些线程可以让操作系统唤醒睡眠的线程以管理到来的事件，而运行循环则是这些线程的基础组件。运行循环是这样一种循环，可以在一个周期内调度任务并处理到来的事件。如果我们需要一个runloop机制，让线程能随时处理事件但并不退出.iOS应用中的每个线程最多只有一个运行循环。对于主线程来说，运行循环会为你开始，在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="runloop运行循环精致介绍">
+<meta property="og:url" content="http://yoursite.com/2016/02/17/iOSNetwork-runloop/index.html">
+<meta property="og:site_name" content="Jay">
+<meta property="og:description" content="运行循环是由类NSRunLoop表示的，一个线程一次只能执行一个任务，执行完成后线程就会退出。
+有些线程可以让操作系统唤醒睡眠的线程以管理到来的事件，而运行循环则是这些线程的基础组件。运行循环是这样一种循环，可以在一个周期内调度任务并处理到来的事件。如果我们需要一个runloop机制，让线程能随时处理事件但并不退出.iOS应用中的每个线程最多只有一个运行循环。对于主线程来说，运行循环会为你开始，在">
+<meta property="og:updated_time" content="2016-02-17T01:43:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="runloop运行循环精致介绍">
+<meta name="twitter:description" content="运行循环是由类NSRunLoop表示的，一个线程一次只能执行一个任务，执行完成后线程就会退出。
+有些线程可以让操作系统唤醒睡眠的线程以管理到来的事件，而运行循环则是这些线程的基础组件。运行循环是这样一种循环，可以在一个周期内调度任务并处理到来的事件。如果我们需要一个runloop机制，让线程能随时处理事件但并不退出.iOS应用中的每个线程最多只有一个运行循环。对于主线程来说，运行循环会为你开始，在">
+  
+    <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://jiecoding.github.io/img/ppig.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Jay&#39;s smile</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>關於</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Jay&#39;s smile</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://jiecoding.github.io/img/ppig.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Jay&#39;s smile</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-iOSNetwork-runloop" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/17/iOSNetwork-runloop/" class="article-date">
+  	<time datetime="2016-02-17T03:21:43.000Z" itemprop="datePublished">2016-02-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      runloop运行循环精致介绍
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>运行循环是由类NSRunLoop表示的，一个线程一次只能执行一个任务，执行完成后线程就会退出。</p>
+<p>有些线程可以让操作系统唤醒睡眠的线程以管理到来的事件，而运行循环则是这些线程的基础组件。运行循环是这样一种循环，可以在一个周期内调度任务并处理到来的事件。如果我们需要一个runloop机制，让线程能随时处理事件但并不退出.iOS应用中的每个线程最多只有一个运行循环。对于主线程来说，运行循环会为你开始，在应用委托的applicationDidFinishLaunchingWithOptions:方法调用后就可以访问了。不过辅助线程必须显式运行自己的运行循环。</p>
+<p>在辅助线程中开始运行循环之前，你至少要添加一个输入源或定时器；否则，运行循环就会立刻退出。</p>
+<p>运行循环向开发者提供了与线程交互的能力，不过有时并不是必需的。</p>
+<p>比如，没有任何其他交互而处理大数据集的线程可能就不会开始运行循环。然而，<br>如果辅助线程与网络交互，就需要开启运行循环。‘</p>
+<p>运行循环会从两类源中接收事件：输入源与定时器。</p>
+<p>输入源(通常是基于端口的或是自定义的)会异步向应用发送事件。这两类源的主要差别在于内核会自动发出基于端口的源信号，而自定义源就需要从不同的线程中手动发出。可以通过实现与CFRunLoopSourceRef相关的几个回调函数来创建自定义输入源。</p>
+<p>定时器会生成基于时间的通知，它为应用(特别是线程)提供了一种机制，以在未来的某个时间执行某个具体任务。定时器事件是同步发出的，并且与特定的模式有关，后面将会对此进行介绍。如果这个特定的模式当前并没有被监控，那么事件就会被忽略掉，线程也不会收到通知，直到运行循环”运行”在相应的模式下为止。</p>
+<pre><code>可以配置定时器以触发一次或者重复触发。重新调度是基于调度的触发时间而不是实际的触发时间。如果定时器触发，同时运行循环正在执行一个应用处理器方法，那么它会等待，直到下一次通过运行循环来调用定时器处理器为止，这一般是通过设定@selector()实现的。如果触发处理器被推迟到了下一次调用发送的那个点，那么定时器只会触发一个事件，之前延迟的事件则会被压制住。
+
+运行循环也可以有观察者，他们不会被监控，这为对象提供了一种方式，使之可以在运行循环执行过程中的某个活动发送时收到回调。这些活动包括进入或退出运行循环、运行循环睡眠或唤醒、运行循环处理输入源或定时器之前等。CFRunloopActivity 枚举的文档中对此有说明。观察者可以配置成触发一次，这样当触发后就会将其删除，也可以配置成重复的，要想添加运行循环观察者，请使用CoreFoundation函数CFRunloopObserverRef().
+</code></pre><p>运行循环模式</p>
+<pre><code>每次通过运行循环都是在你所指定的模式下的一次运行。运行循环模式是由操作系统所用的一种约定，用于过滤监控的源并发布事件，比如调用委托方法等，模式包含了应该监控的输入源与定时器，以及当前运行循环事件发生时应该通知的观察者。
+
+在iOS中有两个预定义的运行循环模式。NSDefaultRunLoopMode(Core Foundation中的kCFRunLoopDefaultmode)是系统默认的，在开始运行循环以及配置输入源时通常会使用它。NSRunLoopCommonModes(core foundation中的kCFRunloopCommonModes)是个可配置的模式集合。通过在输入源实例上调用 scheduleInRunLoop:forMode：等方法，讲NSRunLoopCommonModes赋给输入源会将其与当前组中的所有模式关联起来。
+
+   虽然NSRunLoopCommonModes是可配置的，但这是个底层过程，需要调用Core Foundation函数CFRunloopAddCommonMode().这会自动注册输入源、定时器与新模式的观察者，而不必手工讲其添加到每个新模式中。可以通过制定自定义字符串(如@“customRunLoopMode”) 来定义自定义运行循环模式。想要提高自定义运行循环的效率，你至少需要添加一个输入源、定时器或是观察者。
+</code></pre><p>为什么要有runloop呢？群友：因为手机是个消耗品 主要是电 当没有操作的时候手机需要休眠进行良性循环 也可以理解成一个触发器 你预制的事件在没有被触发的时候就会进入低消耗模式</p>
+<p>有不同意见的或者对文章有疑问的请评论，我会及时回复，一起交流探讨。<br>我们的群号：328218600</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/02/12/NSObjectIdInstancetypeDifference/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NSObject和id的区别以及Instancetype、id&lt;NSObject&gt;</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOSNetwork-runloop" data-title="runloop运行循环精致介绍" data-url="http://yoursite.com/2016/02/17/iOSNetwork-runloop/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Jay&#39;s smile
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

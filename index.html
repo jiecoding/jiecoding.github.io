@@ -198,6 +198,77 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSNetwork-runloop" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/17/iOSNetwork-runloop/" class="article-date">
+  	<time datetime="2016-02-17T03:21:43.000Z" itemprop="datePublished">2016-02-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/17/iOSNetwork-runloop/">runloop运行循环精致介绍</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>运行循环是由类NSRunLoop表示的，一个线程一次只能执行一个任务，执行完成后线程就会退出。</p>
+<p>有些线程可以让操作系统唤醒睡眠的线程以管理到来的事件，而运行循环则是这些线程的基础组件。运行循环是这样一种循环，可以在一个周期内调度任务并处理到来的事件。如果我们需要一个runloop机制，让线程能随时处理事件但并不退出.iOS应用中的每个线程最多只有一个运行循环。对于主线程来说，运行循环会为你开始，在应用委托的applicationDidFinishLaunchingWithOptions:方法调用后就可以访问了。不过辅助线程必须显式运行自己的运行循环。</p>
+<p>在辅助线程中开始运行循环之前，你至少要添加一个输入源或定时器；否则，运行循环就会立刻退出。</p>
+<p>运行循环向开发者提供了与线程交互的能力，不过有时并不是必需的。</p>
+<p>比如，没有任何其他交互而处理大数据集的线程可能就不会开始运行循环。然而，<br>如果辅助线程与网络交互，就需要开启运行循环。‘</p>
+<p>运行循环会从两类源中接收事件：输入源与定时器。</p>
+<p>输入源(通常是基于端口的或是自定义的)会异步向应用发送事件。这两类源的主要差别在于内核会自动发出基于端口的源信号，而自定义源就需要从不同的线程中手动发出。可以通过实现与CFRunLoopSourceRef相关的几个回调函数来创建自定义输入源。</p>
+<p>定时器会生成基于时间的通知，它为应用(特别是线程)提供了一种机制，以在未来的某个时间执行某个具体任务。定时器事件是同步发出的，并且与特定的模式有关，后面将会对此进行介绍。如果这个特定的模式当前并没有被监控，那么事件就会被忽略掉，线程也不会收到通知，直到运行循环”运行”在相应的模式下为止。</p>
+<pre><code>可以配置定时器以触发一次或者重复触发。重新调度是基于调度的触发时间而不是实际的触发时间。如果定时器触发，同时运行循环正在执行一个应用处理器方法，那么它会等待，直到下一次通过运行循环来调用定时器处理器为止，这一般是通过设定@selector()实现的。如果触发处理器被推迟到了下一次调用发送的那个点，那么定时器只会触发一个事件，之前延迟的事件则会被压制住。
+
+运行循环也可以有观察者，他们不会被监控，这为对象提供了一种方式，使之可以在运行循环执行过程中的某个活动发送时收到回调。这些活动包括进入或退出运行循环、运行循环睡眠或唤醒、运行循环处理输入源或定时器之前等。CFRunloopActivity 枚举的文档中对此有说明。观察者可以配置成触发一次，这样当触发后就会将其删除，也可以配置成重复的，要想添加运行循环观察者，请使用CoreFoundation函数CFRunloopObserverRef().
+</code></pre><p>运行循环模式</p>
+<pre><code>每次通过运行循环都是在你所指定的模式下的一次运行。运行循环模式是由操作系统所用的一种约定，用于过滤监控的源并发布事件，比如调用委托方法等，模式包含了应该监控的输入源与定时器，以及当前运行循环事件发生时应该通知的观察者。
+
+在iOS中有两个预定义的运行循环模式。NSDefaultRunLoopMode(Core Foundation中的kCFRunLoopDefaultmode)是系统默认的，在开始运行循环以及配置输入源时通常会使用它。NSRunLoopCommonModes(core foundation中的kCFRunloopCommonModes)是个可配置的模式集合。通过在输入源实例上调用 scheduleInRunLoop:forMode：等方法，讲NSRunLoopCommonModes赋给输入源会将其与当前组中的所有模式关联起来。
+
+   虽然NSRunLoopCommonModes是可配置的，但这是个底层过程，需要调用Core Foundation函数CFRunloopAddCommonMode().这会自动注册输入源、定时器与新模式的观察者，而不必手工讲其添加到每个新模式中。可以通过制定自定义字符串(如@“customRunLoopMode”) 来定义自定义运行循环模式。想要提高自定义运行循环的效率，你至少需要添加一个输入源、定时器或是观察者。
+</code></pre><p>为什么要有runloop呢？群友：因为手机是个消耗品 主要是电 当没有操作的时候手机需要休眠进行良性循环 也可以理解成一个触发器 你预制的事件在没有被触发的时候就会进入低消耗模式</p>
+<p>有不同意见的或者对文章有疑问的请评论，我会及时回复，一起交流探讨。<br>我们的群号：328218600</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-NSObjectIdInstancetypeDifference" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -760,67 +831,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/01/01/hello-world/" class="article-date">
-  	<time datetime="2016-01-01T14:30:58.000Z" itemprop="datePublished">2016-01-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
