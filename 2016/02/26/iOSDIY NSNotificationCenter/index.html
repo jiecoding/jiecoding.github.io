@@ -4,36 +4,33 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>ARC下内存泄露的一些情况 | Jay</title>
+  <title>实现一个自己的NSNotificationCenter | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="循环引用A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。
-
-  这种问题常发生于把delegate声明为strong属性了。
-  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。
-
-死循环
-如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，Vie">
+  <meta name="description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
+如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
+接下来进入正题:
+如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
+但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
+N">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ARC下内存泄露的一些情况">
-<meta property="og:url" content="http://yoursite.com/2016/02/25/iOSARCLeak/index.html">
+<meta property="og:title" content="实现一个自己的NSNotificationCenter">
+<meta property="og:url" content="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="循环引用A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。
-
-  这种问题常发生于把delegate声明为strong属性了。
-  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。
-
-死循环
-如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，Vie">
-<meta property="og:updated_time" content="2016-02-25T03:47:05.000Z">
+<meta property="og:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
+如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
+接下来进入正题:
+如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
+但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
+N">
+<meta property="og:updated_time" content="2016-03-01T05:01:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ARC下内存泄露的一些情况">
-<meta name="twitter:description" content="循环引用A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。
-
-  这种问题常发生于把delegate声明为strong属性了。
-  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。
-
-死循环
-如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，Vie">
+<meta name="twitter:title" content="实现一个自己的NSNotificationCenter">
+<meta name="twitter:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
+如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
+接下来进入正题:
+如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
+但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
+N">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -215,11 +212,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSARCLeak" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSDIY NSNotificationCenter" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/25/iOSARCLeak/" class="article-date">
-  	<time datetime="2016-02-25T05:21:43.000Z" itemprop="datePublished">2016-02-25</time>
+      <a href="/2016/02/26/iOSDIY NSNotificationCenter/" class="article-date">
+  	<time datetime="2016-02-26T03:21:43.000Z" itemprop="datePublished">2016-02-26</time>
 </a>
     </div>
   
@@ -232,7 +229,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ARC下内存泄露的一些情况
+      实现一个自己的NSNotificationCenter
     </h1>
   
 
@@ -248,41 +245,62 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li>循环引用<br>A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。</li>
-</ol>
-<p>  这种问题常发生于把delegate声明为strong属性了。</p>
-<p>  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。</p>
-<ol>
-<li><p>死循环</p>
-<p>如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，ViewController也不能被释放。</p>
-</li>
-</ol>
-<p>  这种问题常发生于animation处理。</p>
-<p>  CATransition *transition = [CATransition animation];</p>
-<p>transition.duration = 0.5;</p>
-<p>tansition.repeatCount = HUGE_VALL;</p>
-<p>[self.view.layer addAnimation:transition forKey:”myAnimation”];</p>
-<p>上例中，animation重复次数设成HUGE_VALL，一个很大的数值，基本上等于无限循环了。</p>
-<p>解决办法是，在ViewController关掉的时候，停止这个animation。</p>
-<p> 参照资料： <a href="http://www.aichengxu.com/view/30206" target="_blank" rel="external">http://www.aichengxu.com/view/30206</a></p>
-<ol>
-<li>block的循环引用:</li>
-</ol>
-<p>这个例子的问题就在于在使用 block 的过程中形成了循环引用：self 持有 networkFetecher；networkFetecher 持有 block；block 持有 self。三者形成循环引用，内存泄露。</p>
-<p>4.performSelector 系列<br>performSelector 顾名思义即在运行时执行一个 selector，最简单的方法如下</p>
+        <p>我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。</p>
+<p>如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。</p>
+<p>接下来进入正题:</p>
+<p>如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。</p>
+<p>但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 </p>
+<p>NSNotificationCenter是一个单例模式，保存了所有注册的观察者 </p>
+<p>当有消息要发送，遍历观察者列表，给对应的观察者转发消息 。</p>
+<p>具体代码实现请看我的github地址:</p>
+<p><a href="https://github.com/jiecoding/DIYNSNotificationCenter" target="_blank" rel="external">https://github.com/jiecoding/DIYNSNotificationCenter</a></p>
+<p>下面的是简单回顾下系统的通知中心(高手可以直接跳过)，对于有什么好的建议请及时提出来，谢谢！</p>
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationSelector) name:@&quot;notificationName&quot; object:nil];
+</code></pre><p>NSNotificationCenter消息通信机制介绍(KVO)</p>
+<p>作用:NSNotificationCenter是专门供程序中不同类间的消息通信而设置的.</p>
+<p>注册通知:即要在什么地方接受消息<br>               [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(mytest:) name:@” mytest” object:nil];<br>      参数介绍:<br>          addObserver:　观察者，即在什么地方接收通知;<br>　       selector:　收到通知后调用何种方法;<br>　       name：　通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>发送通知:调用观察者处的方法。<br>           [[NSNotificationCenter defaultCenter] postNotificationName:@”mytest”　object:searchFriendArray];<br>          参数：<br>         postNotificationName：通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>                 object：传递的参数<br>注册方法的写法:</p>
 <ul>
-<li>(id)performSelector:(SEL)selector;</li>
+<li>(void) mytest:(NSNotification*) notification<br>{<br> id obj = [notification object];//获取到传递的对象<br>} </li>
 </ul>
-<p>但 performSelector 相比直接调用更加灵活</p>
-<p>SEL selector;<br>if (/<em> some condition </em>/) {<br>    selector = @selector(newObject);<br>} else if (/<em> some other condition </em>/) {<br>    selector = @selector(copy);<br>} else {<br>    selector = @selector(someProperty);<br>}<br>id ret = [object performSelector:selector];</p>
-<p>这段代码就相当于在动态之上再动态绑定。在 ARC 下编译这段代码，编译器会发出警告</p>
-<p>正是由于动态，编译器不知道即将调用的 selector 是什么，不了解方法签名和返回值，甚至是否有返回值都不懂，所以编译器无法用 ARC 的内存管理规则来判断返回值是否应该释放。因此，ARC 采用了比较谨慎的做法，不添加释放操作，即在方法返回对象时就可能将其持有，从而可能导致内存泄露。</p>
-<ol>
-<li>在使用 NSTimer addtarget 时，为了防止 target 被释放而导致的程序异常，timer 会持有 target，所以这也是一处内存泄露的隐患。</li>
-</ol>
-<p>6.try…catch</p>
-<p>详细参照:<a href="https://www.zybuluo.com/MicroCai/note/67734" target="_blank" rel="external">https://www.zybuluo.com/MicroCai/note/67734</a><br>觉得总结的不错。</p>
+<p>附：注册键盘升启关闭消息</p>
+<p>//键盘升起 [[NSNotificationCenter……<br>简单的使用参照:<a href="http://my.oschina.net/gexun/blog/385799" target="_blank" rel="external">http://my.oschina.net/gexun/blog/385799</a></p>
+<p>上面简单看了下NSNotificationCenter的使用和简单构成原理。</p>
+<p>然后接下来我们思考下，如果我们自己实现应该如何做？</p>
+<p>第一步 先创建一个单例 ，然后写添加监听和 发送广播 </p>
+<ul>
+<li>(DIYNotificationSingle <em>)sharedManager<br>{<br>static DIYNotificationSingle </em>ManagerInstance = nil;<br>  static dispatch_once_t predicate;<br>  dispatch_once(&amp;predicate, ^{<pre><code>ManagerInstance = [[self alloc] init];
+</code></pre>   });<br>  return ManagerInstance;<br>} </li>
+</ul>
+<ul>
+<li><p>(void)diyAddObserver:(id)observer selector:(SEL)aSelector name:(nullable NSString *)aName object:(nullable id)anObject<br>{</p>
+<pre><code>Entity *entity = [[Entity alloc] init];
+entity.observer = observer;
+entity.aSelector = aSelector;
+entity.notificationName = aName;
+  if(!_observers)
+  {
+      _observers = [[NSMutableArray alloc] init];
+  }
+
+[_observers addObject:entity];
+</code></pre><p>}</p>
+</li>
+<li><p>(void)diyPostNotificationName:(NSString <em>)aName object:(nullable id)anObject<br>{<br>  for (Entity </em>observer in _observers)<br>  {</p>
+<pre><code>[observer.observer performSelector:observer.aSelector withObject:nil];
+</code></pre><p>}</p>
+</li>
+</ul>
+<p>}</p>
+<ul>
+<li><p>(void)diyRemoveObserver:(id)observer name:(nullable NSString *)aName object:(nullable id)anObject<br>{<br>  for (int i = 0; i &lt; _observers.count ; i++){</p>
+<pre><code>Entity *observerE = [_observers objectAtIndex:i];
+if([observerE.observer isEqual:observer]){
+    [_observers removeObjectAtIndex:i];
+}
+</code></pre><p>  }<br>  NSLog(@”remove:%@”,_observers);</p>
+</li>
+</ul>
+<p>}<br>关于消息处理方法runtime等 可以预览下 <a href="http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html" target="_blank" rel="external">http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html</a></p>
 
       
     </div>
@@ -292,18 +310,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/02/26/iOSDIY NSNotificationCenter/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          实现一个自己的NSNotificationCenter
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/02/25/multithreading/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">iOS的多线程</div>
+    <a href="/2016/02/25/iOSARCLeak/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ARC下内存泄露的一些情况</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -338,7 +347,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSARCLeak" data-title="ARC下内存泄露的一些情况" data-url="http://yoursite.com/2016/02/25/iOSARCLeak/"></div>
+	<div class="ds-thread" data-thread-key="iOSDIY NSNotificationCenter" data-title="实现一个自己的NSNotificationCenter" data-url="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

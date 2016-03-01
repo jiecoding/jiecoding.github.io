@@ -198,6 +198,114 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSDIY NSNotificationCenter" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/26/iOSDIY NSNotificationCenter/" class="article-date">
+  	<time datetime="2016-02-26T03:21:43.000Z" itemprop="datePublished">2016-02-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/26/iOSDIY NSNotificationCenter/">实现一个自己的NSNotificationCenter</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。</p>
+<p>如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。</p>
+<p>接下来进入正题:</p>
+<p>如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。</p>
+<p>但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 </p>
+<p>NSNotificationCenter是一个单例模式，保存了所有注册的观察者 </p>
+<p>当有消息要发送，遍历观察者列表，给对应的观察者转发消息 。</p>
+<p>具体代码实现请看我的github地址:</p>
+<p><a href="https://github.com/jiecoding/DIYNSNotificationCenter" target="_blank" rel="external">https://github.com/jiecoding/DIYNSNotificationCenter</a></p>
+<p>下面的是简单回顾下系统的通知中心(高手可以直接跳过)，对于有什么好的建议请及时提出来，谢谢！</p>
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationSelector) name:@&quot;notificationName&quot; object:nil];
+</code></pre><p>NSNotificationCenter消息通信机制介绍(KVO)</p>
+<p>作用:NSNotificationCenter是专门供程序中不同类间的消息通信而设置的.</p>
+<p>注册通知:即要在什么地方接受消息<br>               [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(mytest:) name:@” mytest” object:nil];<br>      参数介绍:<br>          addObserver:　观察者，即在什么地方接收通知;<br>　       selector:　收到通知后调用何种方法;<br>　       name：　通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>发送通知:调用观察者处的方法。<br>           [[NSNotificationCenter defaultCenter] postNotificationName:@”mytest”　object:searchFriendArray];<br>          参数：<br>         postNotificationName：通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>                 object：传递的参数<br>注册方法的写法:</p>
+<ul>
+<li>(void) mytest:(NSNotification*) notification<br>{<br> id obj = [notification object];//获取到传递的对象<br>} </li>
+</ul>
+<p>附：注册键盘升启关闭消息</p>
+<p>//键盘升起 [[NSNotificationCenter……<br>简单的使用参照:<a href="http://my.oschina.net/gexun/blog/385799" target="_blank" rel="external">http://my.oschina.net/gexun/blog/385799</a></p>
+<p>上面简单看了下NSNotificationCenter的使用和简单构成原理。</p>
+<p>然后接下来我们思考下，如果我们自己实现应该如何做？</p>
+<p>第一步 先创建一个单例 ，然后写添加监听和 发送广播 </p>
+<ul>
+<li>(DIYNotificationSingle <em>)sharedManager<br>{<br>static DIYNotificationSingle </em>ManagerInstance = nil;<br>  static dispatch_once_t predicate;<br>  dispatch_once(&amp;predicate, ^{<pre><code>ManagerInstance = [[self alloc] init];
+</code></pre>   });<br>  return ManagerInstance;<br>} </li>
+</ul>
+<ul>
+<li><p>(void)diyAddObserver:(id)observer selector:(SEL)aSelector name:(nullable NSString *)aName object:(nullable id)anObject<br>{</p>
+<pre><code>Entity *entity = [[Entity alloc] init];
+entity.observer = observer;
+entity.aSelector = aSelector;
+entity.notificationName = aName;
+  if(!_observers)
+  {
+      _observers = [[NSMutableArray alloc] init];
+  }
+
+[_observers addObject:entity];
+</code></pre><p>}</p>
+</li>
+<li><p>(void)diyPostNotificationName:(NSString <em>)aName object:(nullable id)anObject<br>{<br>  for (Entity </em>observer in _observers)<br>  {</p>
+<pre><code>[observer.observer performSelector:observer.aSelector withObject:nil];
+</code></pre><p>}</p>
+</li>
+</ul>
+<p>}</p>
+<ul>
+<li><p>(void)diyRemoveObserver:(id)observer name:(nullable NSString *)aName object:(nullable id)anObject<br>{<br>  for (int i = 0; i &lt; _observers.count ; i++){</p>
+<pre><code>Entity *observerE = [_observers objectAtIndex:i];
+if([observerE.observer isEqual:observer]){
+    [_observers removeObjectAtIndex:i];
+}
+</code></pre><p>  }<br>  NSLog(@”remove:%@”,_observers);</p>
+</li>
+</ul>
+<p>}<br>关于消息处理方法runtime等 可以预览下 <a href="http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html" target="_blank" rel="external">http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSARCLeak" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -846,67 +954,6 @@
       
         <p>NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。<br>NSStream提供的额外控制是有代价的。它并没有提供对处理HTTP/S响应状态码或认证的内建支持。它所发出与接收的数据都位于C缓冲中，Objective-C开发者对此可能不大熟悉。它还无法管理多个外发请求，需要子类化才能添加这个特性。NSStream是异步的，通过NSStreamDelegate实现通信更新。</p>
 <p>关于底层网络的实现有待补充…</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSNetwork-function3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/01/iOSNetwork-function3/" class="article-date">
-  	<time datetime="2016-02-01T06:33:57.000Z" itemprop="datePublished">2016-02-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/01/iOSNetwork-function3/">iOS 网络 API &lt;二&gt;</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>框架栈的每一层都提供了一套关键的API.为开发者提供了各种功能与控制。 
-
-每一层都比下一层提供更高的抽象（图可参见上一篇博文）。然而，这种抽象的代价就是丧失了某些控制。
-
-接下来我们概述下iOS中关键的网络api以及使用时要注意的：
-</code></pre><p>  (1).NSURLConnection<br>      NSURLConnection是一个 Cocoa 级别的API,它提供了一个简单的方法来加载URL请求，可以与Web Service交互、获取图片或视频，或者只是简单地得到一个格式化的HTML文档。<br>      它构建在NSStream之上，并且在设计时针对如下4个常见的URI模式进行了优化支持：文件、HTTP、HTTPS与FTP。 虽然NSURLConnection限制了你所能使用的协议，但它对缓存读写的很多底层工作进行了抽象，包括对认证内建支持。并且提供了一个健壮的缓存引擎。<br>      NSURLConnection接口中的内容并不多，它主要依赖于NSURLConnectionDelegate 协议，应用可以凭借后者介入到连接生命周期的很多点上。在默认情况下，NSURLConnection请求是异步的；不过有一个便捷方法可以发送同步请求。同步请求会阻塞调用线程，因此你也需要根据这一点来设计应用。这里简单先了解下NSURLConnection.值得一提的是 AFNetworking3.0版本以前就是构建于NSURLConnection。<br>例子：通过NSURLConnection进行异步\同步下载，GET POST 请求。 <a href="http://blog.csdn.net/chaoyuan899/article/details/27656141" target="_blank" rel="external">连接</a>       </p>
-<p>(2).Game kit<br>    Game Kit的核心功能在于为iOS 应用程序提供了另一个 点到点 的网络选项。<br>    在传统的网络配置中，Game Kit构建在Bonjour之上；然而 GameKit并不需要网络基础设施就能使用。<br>    它能创建自组(ad-hoc)的Bluetooth Personal Area Networks(PAN),<br>    这样在极少或是没有基础设施的地方，它就是非常棒的网络候选者了。<br>    在创建网络时，Game kit 只需要会话标示符，显示名与连接模式即可。<br>    不需要socket配置或是任何其他底层网络就可以实现连接点之间的通信。<br>    Game kit通过GKSessionDelegate协议进行通信。</p>
-<p>(3)Bonjour<br>Bonjour是apple对零配置(zerocnf)网络的实现。<br>它提供了一种机制，可以检测并与网络中的设备或服务进行连接，同时无须了解设备的网络地址，<br>Bonjour通过名字、服务类型与域这个元组来引用服务。它对多播DNS与基于DNS的服务探测，<br>所要求的底层网络进行了抽象。<br>在Cocoa层，NSNetService API提供了一个接口，用于发布和解析Bonjour服务的地址信息。<br>可以通过NSNetServiceBrowser API探测网络上可用的服务。<br>发布Bonjour服务（甚至使用cocos层的api）需要理解Core Fondation才能配置好通信所需的socket.</p>
-<p>简单了解下URI：在电脑术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对任何（包括本地和互联网）的资源通过特定的协议进行交互操作。URI由包括确定语法和相关协议的方案所定义。<br>Web上可用的每种资源 -HTML文档、图像、视频片段、程序等 - 由一个通用资源标识符（Uniform Resource Identifier, 简称”URI”）进行定位。<br>URI、URL和URN<br>URI ：Uniform Resource Identifier，统一资源标识符；<br>URL：Uniform Resource Locator，统一资源定位符；<br>URN：Uniform Resource Name，统一资源名称。<br>其中，URL,URN是URI的子集。</p>
 
       
     </div>
