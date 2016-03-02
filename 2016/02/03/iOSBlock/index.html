@@ -4,33 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>实现一个自己的NSNotificationCenter | Jay</title>
+  <title>Block | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
+  <meta name="description" content="block其实挺强大的，现在来做个总结，从简单到难
+简单认识block http://my.oschina.net/u/1418722/blog/233047
+利用block代替委托 http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html
+可能会出现的问题: 
+1.capturing ‘self’ strongly in this block is">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实现一个自己的NSNotificationCenter">
-<meta property="og:url" content="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/index.html">
+<meta property="og:title" content="Block">
+<meta property="og:url" content="http://yoursite.com/2016/02/03/iOSBlock/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
-<meta property="og:updated_time" content="2016-03-01T05:01:11.000Z">
+<meta property="og:description" content="block其实挺强大的，现在来做个总结，从简单到难
+简单认识block http://my.oschina.net/u/1418722/blog/233047
+利用block代替委托 http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html
+可能会出现的问题: 
+1.capturing ‘self’ strongly in this block is">
+<meta property="og:updated_time" content="2016-03-01T08:32:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实现一个自己的NSNotificationCenter">
-<meta name="twitter:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
+<meta name="twitter:title" content="Block">
+<meta name="twitter:description" content="block其实挺强大的，现在来做个总结，从简单到难
+简单认识block http://my.oschina.net/u/1418722/blog/233047
+利用block代替委托 http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html
+可能会出现的问题: 
+1.capturing ‘self’ strongly in this block is">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -202,11 +199,11 @@ N">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSDIY NSNotificationCenter" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSBlock" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/26/iOSDIY NSNotificationCenter/" class="article-date">
-  	<time datetime="2016-02-26T03:21:43.000Z" itemprop="datePublished">2016-02-26</time>
+      <a href="/2016/02/03/iOSBlock/" class="article-date">
+  	<time datetime="2016-02-03T03:31:43.000Z" itemprop="datePublished">2016-02-03</time>
 </a>
     </div>
   
@@ -219,7 +216,7 @@ N">
         
   
     <h1 class="article-title" itemprop="name">
-      实现一个自己的NSNotificationCenter
+      Block
     </h1>
   
 
@@ -235,62 +232,33 @@ N">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。</p>
-<p>如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。</p>
-<p>接下来进入正题:</p>
-<p>如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。</p>
-<p>但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 </p>
-<p>NSNotificationCenter是一个单例模式，保存了所有注册的观察者 </p>
-<p>当有消息要发送，遍历观察者列表，给对应的观察者转发消息 。</p>
-<p>具体代码实现请看我的github地址:</p>
-<p><a href="https://github.com/jiecoding/DIYNSNotificationCenter" target="_blank" rel="external">https://github.com/jiecoding/DIYNSNotificationCenter</a></p>
-<p>下面的是简单回顾下系统的通知中心(高手可以直接跳过)，对于有什么好的建议请及时提出来，谢谢！</p>
-<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationSelector) name:@&quot;notificationName&quot; object:nil];
-</code></pre><p>NSNotificationCenter消息通信机制介绍(KVO)</p>
-<p>作用:NSNotificationCenter是专门供程序中不同类间的消息通信而设置的.</p>
-<p>注册通知:即要在什么地方接受消息<br>               [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(mytest:) name:@” mytest” object:nil];<br>      参数介绍:<br>          addObserver:　观察者，即在什么地方接收通知;<br>　       selector:　收到通知后调用何种方法;<br>　       name：　通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>发送通知:调用观察者处的方法。<br>           [[NSNotificationCenter defaultCenter] postNotificationName:@”mytest”　object:searchFriendArray];<br>          参数：<br>         postNotificationName：通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>                 object：传递的参数<br>注册方法的写法:</p>
-<ul>
-<li>(void) mytest:(NSNotification*) notification<br>{<br> id obj = [notification object];//获取到传递的对象<br>} </li>
-</ul>
-<p>附：注册键盘升启关闭消息</p>
-<p>//键盘升起 [[NSNotificationCenter……<br>简单的使用参照:<a href="http://my.oschina.net/gexun/blog/385799" target="_blank" rel="external">http://my.oschina.net/gexun/blog/385799</a></p>
-<p>上面简单看了下NSNotificationCenter的使用和简单构成原理。</p>
-<p>然后接下来我们思考下，如果我们自己实现应该如何做？</p>
-<p>第一步 先创建一个单例 ，然后写添加监听和 发送广播 </p>
-<ul>
-<li>(DIYNotificationSingle <em>)sharedManager<br>{<br>static DIYNotificationSingle </em>ManagerInstance = nil;<br>  static dispatch_once_t predicate;<br>  dispatch_once(&amp;predicate, ^{<pre><code>ManagerInstance = [[self alloc] init];
-</code></pre>   });<br>  return ManagerInstance;<br>} </li>
-</ul>
-<ul>
-<li><p>(void)diyAddObserver:(id)observer selector:(SEL)aSelector name:(nullable NSString *)aName object:(nullable id)anObject<br>{</p>
-<pre><code>Entity *entity = [[Entity alloc] init];
-entity.observer = observer;
-entity.aSelector = aSelector;
-entity.notificationName = aName;
-  if(!_observers)
-  {
-      _observers = [[NSMutableArray alloc] init];
-  }
+        <p>block其实挺强大的，现在来做个总结，从简单到难</p>
+<p>简单认识block <a href="http://my.oschina.net/u/1418722/blog/233047" target="_blank" rel="external">http://my.oschina.net/u/1418722/blog/233047</a></p>
+<p>利用block代替委托 <a href="http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html</a></p>
+<p>可能会出现的问题: </p>
+<p>1.capturing ‘self’ strongly in this block is like<br>例如：<br> //如果不写这句话 下面block里就会出现 ：capturing ‘self’ strongly in this block is like<br>    __block DNHorizontalSelectController *  blockSelf = self;</p>
+<pre><code>_navTabbarView.updateTabBarSelectBlock = ^(NSInteger index)
+{
+    index = index%1000;
 
-[_observers addObject:entity];
-</code></pre><p>}</p>
-</li>
-<li><p>(void)diyPostNotificationName:(NSString <em>)aName object:(nullable id)anObject<br>{<br>  for (Entity </em>observer in _observers)<br>  {</p>
-<pre><code>[observer.observer performSelector:observer.aSelector withObject:nil];
-</code></pre><p>}</p>
-</li>
-</ul>
-<p>}</p>
-<ul>
-<li><p>(void)diyRemoveObserver:(id)observer name:(nullable NSString *)aName object:(nullable id)anObject<br>{<br>  for (int i = 0; i &lt; _observers.count ; i++){</p>
-<pre><code>Entity *observerE = [_observers objectAtIndex:i];
-if([observerE.observer isEqual:observer]){
-    [_observers removeObjectAtIndex:i];
-}
-</code></pre><p>  }<br>  NSLog(@”remove:%@”,_observers);</p>
-</li>
-</ul>
-<p>}<br>关于消息处理方法runtime等 可以预览下 <a href="http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html" target="_blank" rel="external">http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html</a></p>
+    blockSelf.mainScrollView.contentOffset = CGPointMake(self.view.frame.size.width*index, 0);
+};
+</code></pre><p>block 是代码块的意思。 甲里引用乙，乙里引用甲，就会导致 “retain cycle” – “形成怪圈”的错误。 网上资料： 解决的办法是 创建一个本地变量 指向 自己(self). 例如：_items 实际上是 self-&gt;items, _block 对象在创建的时候会被retain一次 改成： __block ViewController <em>blockSelf = self; _block = ^{ [blockSelf-&gt;_items addObject:@”Hello!”]; }; 就可以了。 ——————- DoSomethingManager </em>manager = [[DoSomethingManager alloc] init]; manager.complete = ^{ //…complete actions [manager otherAction]; manager.complete = nil; // Objective-C 用这种方法破坏怪圈。 [manager release]; }; ————…</p>
+<p>为什么不用<strong>block 是因为通过引用来访问self的实例变量 ，self被retain,block也是一个强引用，引起循环引用，用</strong>week是弱引用，当self释放时，weakSelf已经等于nil。<br>self 持有 block  ,block持有 self retaincount==0才会释放 循环了怎么-1</p>
+<p><a href="http://blog.csdn.net/youngqj/article/details/49301627" target="_blank" rel="external">http://blog.csdn.net/youngqj/article/details/49301627</a></p>
+<p>2.<strong>block 还是 </strong>weak</p>
+<p>Blocks可以访问局部变量，但是不能修改</p>
+<p>如果修改局部变量，需要加__block</p>
+<p>在某個變數前面如果加上修飾字__block 的話(注意block前有兩個下底線)，這個變數又稱為block variable。那麼在block裡就可以任意修改此變數值，變數值的改變也可以知道。 </p>
+<p>block中用到的外部变量最好使用 __weak 修饰，避免内存泄露; block容易引起引用循环的根本原因是: </p>
+<p>1，对于(block内部用到的)外部变量，对其执行retain 的时机 与该block的执行时机是不同步的,在block声明的时候就对外部变量进行了retain，而block何时执行甚至是否执行都是不可预测的； </p>
+<p>2，block 一般是匿名的，而且copy赋值的，手动释放block对象比较困难</p>
+<p>两者的区别：</p>
+<p>1.<strong>block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。<br>2.</strong>weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。<br>3.<strong>block对象可以在block中被重新赋值，</strong>weak不可以。<br>PS：<strong>unsafe_unretained修饰符可以被视为iOS SDK 4.3以前版本的</strong>weak的替代品，不过不会被自动置空为nil。所以尽可能不要使用这个修饰符。</p>
+<p><strong>weak不增加引用，</strong>block增加引用<br><strong>block 是让修改外部变量的值.
+</strong>weak是避免memory cycle </p>
+<p>在ARC下不用<strong>block 而是用 </strong>weak 为了避免出现循环引用</p>
+<p>有异议可以提<br>连接:<a href="http://www.bubuko.com/infodetail-782508.html" target="_blank" rel="external">http://www.bubuko.com/infodetail-782508.html</a><br><a href="http://my.oschina.net/u/255456/blog/423991" target="_blank" rel="external">http://my.oschina.net/u/255456/blog/423991</a></p>
 
       
     </div>
@@ -300,18 +268,18 @@ if([observerE.observer isEqual:observer]){
     
 <nav id="article-nav">
   
-    <a href="/2016/03/01/iOSUnitTesting/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/02/03/ThinkOC-OOP/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          iOS单元测试简单使用
+          Objective-c如何在C基础上实现面向对象
         
       </div>
     </a>
   
   
-    <a href="/2016/02/25/iOSARCLeak/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">ARC下内存泄露的一些情况</div>
+    <a href="/2016/02/03/iOSNetwork-function6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">BSD socket</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -346,7 +314,7 @@ if([observerE.observer isEqual:observer]){
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSDIY NSNotificationCenter" data-title="实现一个自己的NSNotificationCenter" data-url="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/"></div>
+	<div class="ds-thread" data-thread-key="iOSBlock" data-title="Block" data-url="http://yoursite.com/2016/02/03/iOSBlock/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

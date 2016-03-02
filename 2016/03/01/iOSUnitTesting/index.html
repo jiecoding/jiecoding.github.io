@@ -4,33 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>实现一个自己的NSNotificationCenter | Jay</title>
+  <title>iOS单元测试简单使用 | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
+  <meta name="description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
+我们可以对某一个功能进行单独测试，不用整体运行 
+只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
+最简单的例子：
+按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实现一个自己的NSNotificationCenter">
-<meta property="og:url" content="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/index.html">
+<meta property="og:title" content="iOS单元测试简单使用">
+<meta property="og:url" content="http://yoursite.com/2016/03/01/iOSUnitTesting/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
-<meta property="og:updated_time" content="2016-03-01T05:01:11.000Z">
+<meta property="og:description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
+我们可以对某一个功能进行单独测试，不用整体运行 
+只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
+最简单的例子：
+按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
+<meta property="og:updated_time" content="2016-03-01T06:52:27.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实现一个自己的NSNotificationCenter">
-<meta name="twitter:description" content="我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。
-如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。
-接下来进入正题:
-如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。
-但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 
-N">
+<meta name="twitter:title" content="iOS单元测试简单使用">
+<meta name="twitter:description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
+我们可以对某一个功能进行单独测试，不用整体运行 
+只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
+最简单的例子：
+按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -202,11 +199,11 @@ N">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSDIY NSNotificationCenter" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSUnitTesting" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/26/iOSDIY NSNotificationCenter/" class="article-date">
-  	<time datetime="2016-02-26T03:21:43.000Z" itemprop="datePublished">2016-02-26</time>
+      <a href="/2016/03/01/iOSUnitTesting/" class="article-date">
+  	<time datetime="2016-03-01T06:15:43.000Z" itemprop="datePublished">2016-03-01</time>
 </a>
     </div>
   
@@ -219,7 +216,7 @@ N">
         
   
     <h1 class="article-title" itemprop="name">
-      实现一个自己的NSNotificationCenter
+      iOS单元测试简单使用
     </h1>
   
 
@@ -235,62 +232,32 @@ N">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>我一直觉得代码会随着时间的久更新变动的快，但是思想这个东西是越经过时间越经典的一个东西。</p>
-<p>如何获取一些好的思想呢？多看别人的代码 多去总结和思考 多交流 分享 面试 等等 都是获取一些好的想法的途径。</p>
-<p>接下来进入正题:</p>
-<p>如何来实现一个自己的NSNotificationCenter？由于我们看不到源码 所以也不知道苹果具体是怎么实现的。</p>
-<p>但是大致肯定的是：系统的通知中心，就是用观察者模式实现的 </p>
-<p>NSNotificationCenter是一个单例模式，保存了所有注册的观察者 </p>
-<p>当有消息要发送，遍历观察者列表，给对应的观察者转发消息 。</p>
-<p>具体代码实现请看我的github地址:</p>
-<p><a href="https://github.com/jiecoding/DIYNSNotificationCenter" target="_blank" rel="external">https://github.com/jiecoding/DIYNSNotificationCenter</a></p>
-<p>下面的是简单回顾下系统的通知中心(高手可以直接跳过)，对于有什么好的建议请及时提出来，谢谢！</p>
-<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationSelector) name:@&quot;notificationName&quot; object:nil];
-</code></pre><p>NSNotificationCenter消息通信机制介绍(KVO)</p>
-<p>作用:NSNotificationCenter是专门供程序中不同类间的消息通信而设置的.</p>
-<p>注册通知:即要在什么地方接受消息<br>               [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(mytest:) name:@” mytest” object:nil];<br>      参数介绍:<br>          addObserver:　观察者，即在什么地方接收通知;<br>　       selector:　收到通知后调用何种方法;<br>　       name：　通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>发送通知:调用观察者处的方法。<br>           [[NSNotificationCenter defaultCenter] postNotificationName:@”mytest”　object:searchFriendArray];<br>          参数：<br>         postNotificationName：通知的名字，也是通知的唯一标示，编译器就通过这个找到通知的。<br>                 object：传递的参数<br>注册方法的写法:</p>
-<ul>
-<li>(void) mytest:(NSNotification*) notification<br>{<br> id obj = [notification object];//获取到传递的对象<br>} </li>
+        <p>单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。</p>
+<p>我们可以对某一个功能进行单独测试，不用整体运行 </p>
+<p>只需要在单元测试 <strong><strong><strong><strong><strong>_</strong></strong></strong></strong></strong>Tests.m 加入我们自定义的方法和要测试的内容就可以了。</p>
+<p>最简单的例子：</p>
+<p>按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入<br> NSLog(@”自定义测试testExample”);<br>    int  a= 3;<br>    XCTAssertTrue(a == 0,”a 不能等于 0”);</p>
+<p>自带OCUnit的测试用例最常用的方法有三个：</p>
+<ol>
+<li><ul>
+<li>(void)setUp：每个test方法执行前调用</li>
 </ul>
-<p>附：注册键盘升启关闭消息</p>
-<p>//键盘升起 [[NSNotificationCenter……<br>简单的使用参照:<a href="http://my.oschina.net/gexun/blog/385799" target="_blank" rel="external">http://my.oschina.net/gexun/blog/385799</a></p>
-<p>上面简单看了下NSNotificationCenter的使用和简单构成原理。</p>
-<p>然后接下来我们思考下，如果我们自己实现应该如何做？</p>
-<p>第一步 先创建一个单例 ，然后写添加监听和 发送广播 </p>
-<ul>
-<li>(DIYNotificationSingle <em>)sharedManager<br>{<br>static DIYNotificationSingle </em>ManagerInstance = nil;<br>  static dispatch_once_t predicate;<br>  dispatch_once(&amp;predicate, ^{<pre><code>ManagerInstance = [[self alloc] init];
-</code></pre>   });<br>  return ManagerInstance;<br>} </li>
-</ul>
-<ul>
-<li><p>(void)diyAddObserver:(id)observer selector:(SEL)aSelector name:(nullable NSString *)aName object:(nullable id)anObject<br>{</p>
-<pre><code>Entity *entity = [[Entity alloc] init];
-entity.observer = observer;
-entity.aSelector = aSelector;
-entity.notificationName = aName;
-  if(!_observers)
-  {
-      _observers = [[NSMutableArray alloc] init];
-  }
-
-[_observers addObject:entity];
-</code></pre><p>}</p>
 </li>
-<li><p>(void)diyPostNotificationName:(NSString <em>)aName object:(nullable id)anObject<br>{<br>  for (Entity </em>observer in _observers)<br>  {</p>
-<pre><code>[observer.observer performSelector:observer.aSelector withObject:nil];
-</code></pre><p>}</p>
-</li>
+<li><ul>
+<li>(void)tearDown：每个test方法执行后调用</li>
 </ul>
-<p>}</p>
-<ul>
-<li><p>(void)diyRemoveObserver:(id)observer name:(nullable NSString *)aName object:(nullable id)anObject<br>{<br>  for (int i = 0; i &lt; _observers.count ; i++){</p>
-<pre><code>Entity *observerE = [_observers objectAtIndex:i];
-if([observerE.observer isEqual:observer]){
-    [_observers removeObjectAtIndex:i];
-}
-</code></pre><p>  }<br>  NSLog(@”remove:%@”,_observers);</p>
 </li>
+<li><ul>
+<li>(void)testXXX：命名为XXX的测试方法</li>
 </ul>
-<p>}<br>关于消息处理方法runtime等 可以预览下 <a href="http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html" target="_blank" rel="external">http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html</a></p>
+</li>
+</ol>
+<p>我们也可以自己起个方法名字 - (void)xxxx 里面放入我们想要测试的功能。</p>
+<p>比如你可以单独测试某个网络接口是否可以使用，不用再一个一个页面进行跳转然后进行测试。</p>
+<p>注意：相应的文件链接地址也要在单元测试里配置下。</p>
+<p>当然也有一些高级的作用，比如自动发布、自动测试（特别在一些大的项目，以防止程序被误改或引起新的问题）。</p>
+<p>这个可以有空研究下…</p>
+<p>两篇不错的文章：<a href="http://www.jianshu.com/p/8bbec078cabe" target="_blank" rel="external">http://www.jianshu.com/p/8bbec078cabe</a><br><a href="http://www.cocoachina.com/industry/20130724/6667.html" target="_blank" rel="external">http://www.cocoachina.com/industry/20130724/6667.html</a></p>
 
       
     </div>
@@ -300,18 +267,9 @@ if([observerE.observer isEqual:observer]){
     
 <nav id="article-nav">
   
-    <a href="/2016/03/01/iOSUnitTesting/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          iOS单元测试简单使用
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/02/25/iOSARCLeak/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">ARC下内存泄露的一些情况</div>
+    <a href="/2016/02/26/iOSDIY NSNotificationCenter/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">实现一个自己的NSNotificationCenter</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -346,7 +304,7 @@ if([observerE.observer isEqual:observer]){
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSDIY NSNotificationCenter" data-title="实现一个自己的NSNotificationCenter" data-url="http://yoursite.com/2016/02/26/iOSDIY NSNotificationCenter/"></div>
+	<div class="ds-thread" data-thread-key="iOSUnitTesting" data-title="iOS单元测试简单使用" data-url="http://yoursite.com/2016/03/01/iOSUnitTesting/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
