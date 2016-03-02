@@ -188,6 +188,115 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSRuntime" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/02/iOSRuntime/" class="article-date">
+  	<time datetime="2016-03-02T03:21:43.000Z" itemprop="datePublished">2016-03-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/02/iOSRuntime/">iOS Runtime</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>简单介绍下runtime<br><a href="http://www.cocoachina.com/ios/20141018/9960.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20141018/9960.html</a></p>
+<p><a href="http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/" target="_blank" rel="external">http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/</a></p>
+<p>我们在运行代码的时候 像下面这个方法：</p>
+<p> [target doMethodWith:var1];  运行时会转换为 objc_msgSend(target,@selector(doMethodWith:),var1);  C语言函数指针</p>
+<p>关于runtime的一些问题：<a href="http://blog.csdn.net/a19860903/article/details/45044701" target="_blank" rel="external">http://blog.csdn.net/a19860903/article/details/45044701</a></p>
+<p>第一、文章里面有一个问题：</p>
+<p>下面的代码输出什么？</p>
+<p>@implementation Son : Father</p>
+<ul>
+<li>(id)init</li>
+</ul>
+<p>{</p>
+<pre><code>self = [super init];
+
+if (self)
+
+{
+
+    NSLog(@&quot;%@&quot;, NSStringFromClass([self class]));
+
+    NSLog(@&quot;%@&quot;, NSStringFromClass([super class]));
+
+}
+
+return self;
+</code></pre><p>}</p>
+<p>@end</p>
+<p>答案：都输出 Son （前提是father和son类都没有重写class这个方法，而是调用的nsobject的class方法）</p>
+<p>首先对于这个题，如果Son类没有重写class方法，而Father类里重写了NSObject的class这个方法，那么[self class] 会去调用父类Father里的class方法，如果想要上面输出: Son 和 Father这种正确的类名，那么就要重写两个类的class方法:</p>
+<p>Son.m<br>//- (Class)class OBJC_SWIFT_UNAVAILABLE(“use ‘anObject.dynamicType’ instead”)<br>//{<br>//    return  [Son class];<br>//}</p>
+<p>Father.m<br>//- (Class)class OBJC_SWIFT_UNAVAILABLE(“use ‘anObject.dynamicType’ instead”)<br>//{<br>//   return  [Father class];<br>//}</p>
+<p>首先这道题，如果你想打印父类，那么就不应该这样写：     </p>
+<p>NSLog(@”%@”, NSStringFromClass([super class]));</p>
+<p>而是：</p>
+<p>NSLog(@”%@”,NSStringFromClass([self superclass]));</p>
+<p>达到我们需要的结果后，我们就要思考，上面那段为什么会都输出Son呢，到底进行了什么？</p>
+<p>首先前面说到过类似 [self class] 这种 会在运行时转换成 objc_msgSend 函数,objc_msgSend， 它就是负责发送一个消息给对象的C函数</p>
+<p>objc-runtime.h 里面 </p>
+<p>#include <objc runtime.h=""></objc></p>
+<p>#include <objc message.h=""> </objc></p>
+<p>objc_msgSend 和 objc_msgSendSuper 就是在message.h 类里</p>
+<p>这个函数 objc_msgSend(&lt;#id#&gt;, &lt;#SEL, …#&gt;)<br>有两个参数 </p>
+<p>id objc_msgSend(id self, SEL op, …)<br>我们把 self 做为第一个参数传递进去。</p>
+<p>id objc_msgSendSuper(struct objc_super *super, SEL op, …)</p>
+<p>第一个参数是 objc_super 这样一个结构体，其定义如下:</p>
+<p>struct objc_super {</p>
+<p>   __unsafe_unretained id receiver;</p>
+<p>   __unsafe_unretained Class super_class;</p>
+<p>};</p>
+<p>结构体有两个成员，第一个成员是 receiver, 类似于上面的 objc_msgSend函数第一个参数self 。第二个成员是记录当前类的父类是什么。<br>…<br>解惑：这个题目主要是考察关于objc中对 self 和 super 的理解。</p>
+<p>self 是类的隐藏参数，指向当前调用方法的这个类的实例。</p>
+<p>而 super 是一个 Magic Keyword， 它本质是一个编译器标示符，和 self 是指向的同一个消息接受者。</p>
+<p>上面的例子不管调用[self class]还是[super class]，接受消息的对象都是当前 Son ＊xxx 这个对象。而不同的是，super是告诉编译器，调用 class 这个方法时，要去父类的方法，而不是本类里的。</p>
+<p>Class实际上是存在于内存中的，可以看成是一个特殊的对象 对一个子类发消息，如果子类中找不到对应的方法，会自动向上搜索，直到根类</p>
+<p>[super class];在哪个类里写，哪个类就是接收消息的对象 self 指在本类中找到方法 让本类去执行  super 是在编译的时候 让机器去父类或者父类的父类找方法 然后还是本类执行 所以 【super class】 是在父类的父类 也就是NSObject中 找到了这个方法 但是 执行的时候 都是Son 执行的 所以 打印结果就是一样的（个人理解）</p>
+<p>具体多看上面的连接，熟能生巧。</p>
+<p>待补充</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSUnitTesting" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -941,59 +1050,6 @@ if([observerE.observer isEqual:observer]){
 </strong>weak是避免memory cycle </p>
 <p>在ARC下不用<strong>block 而是用 </strong>weak 为了避免出现循环引用</p>
 <p>有异议可以提<br>连接:<a href="http://www.bubuko.com/infodetail-782508.html" target="_blank" rel="external">http://www.bubuko.com/infodetail-782508.html</a><br><a href="http://my.oschina.net/u/255456/blog/423991" target="_blank" rel="external">http://my.oschina.net/u/255456/blog/423991</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSNetwork-function6" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/03/iOSNetwork-function6/" class="article-date">
-  	<time datetime="2016-02-03T03:21:43.000Z" itemprop="datePublished">2016-02-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/03/iOSNetwork-function6/">BSD socket</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>BSD socket 构成了大多数Internet活动的基础，是网络框架层次体系中的最底层。BSD socket使用C实现，但也可以用在Objective-C代码中。并不推荐使用BSD socket API，因为它并没有在操作系统中插入任何钩子(hook)。比如，BSD socket无法穿过系统范围的VPN,如果Wi-Fi 或是蜂窝无线电被关闭了。调用其API也无法自动激活。Apple建议至少使用CFNetwork或是更高的API.</p>
 
       
     </div>

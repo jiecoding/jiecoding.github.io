@@ -4,30 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>iOS单元测试简单使用 | Jay</title>
+  <title>iOS Runtime | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
-我们可以对某一个功能进行单独测试，不用整体运行 
-只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
-最简单的例子：
-按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
+  <meta name="description" content="简单介绍下runtimehttp://www.cocoachina.com/ios/20141018/9960.html
+http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/
+我们在运行代码的时候 像下面这个方法：
+ [target doMethodWith:var1];  运行时会转换为 objc_msgSend(t">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS单元测试简单使用">
-<meta property="og:url" content="http://yoursite.com/2016/03/01/iOSUnitTesting/index.html">
+<meta property="og:title" content="iOS Runtime">
+<meta property="og:url" content="http://yoursite.com/2016/03/02/iOSRuntime/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
-我们可以对某一个功能进行单独测试，不用整体运行 
-只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
-最简单的例子：
-按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
-<meta property="og:updated_time" content="2016-03-01T06:52:27.000Z">
+<meta property="og:description" content="简单介绍下runtimehttp://www.cocoachina.com/ios/20141018/9960.html
+http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/
+我们在运行代码的时候 像下面这个方法：
+ [target doMethodWith:var1];  运行时会转换为 objc_msgSend(t">
+<meta property="og:updated_time" content="2016-03-02T06:04:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS单元测试简单使用">
-<meta name="twitter:description" content="单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。
-我们可以对某一个功能进行单独测试，不用整体运行 
-只需要在单元测试 _Tests.m 加入我们自定义的方法和要测试的内容就可以了。
-最简单的例子：
-按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入 NSLog(@”自定义测试testExample”);    int  a">
+<meta name="twitter:title" content="iOS Runtime">
+<meta name="twitter:description" content="简单介绍下runtimehttp://www.cocoachina.com/ios/20141018/9960.html
+http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/
+我们在运行代码的时候 像下面这个方法：
+ [target doMethodWith:var1];  运行时会转换为 objc_msgSend(t">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -199,11 +196,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSUnitTesting" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSRuntime" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/01/iOSUnitTesting/" class="article-date">
-  	<time datetime="2016-03-01T06:15:43.000Z" itemprop="datePublished">2016-03-01</time>
+      <a href="/2016/03/02/iOSRuntime/" class="article-date">
+  	<time datetime="2016-03-02T03:21:43.000Z" itemprop="datePublished">2016-03-02</time>
 </a>
     </div>
   
@@ -216,7 +213,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      iOS单元测试简单使用
+      iOS Runtime
     </h1>
   
 
@@ -232,32 +229,63 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>单元测试一般我们都不会主动去用，除非有这方面需求，这个东西用起来还是蛮好的。</p>
-<p>我们可以对某一个功能进行单独测试，不用整体运行 </p>
-<p>只需要在单元测试 <strong><strong><strong><strong><strong>_</strong></strong></strong></strong></strong>Tests.m 加入我们自定义的方法和要测试的内容就可以了。</p>
-<p>最简单的例子：</p>
-<p>按快捷键Command + U进行单元测试，这个快捷键是全部测试。testExample方法中输入<br> NSLog(@”自定义测试testExample”);<br>    int  a= 3;<br>    XCTAssertTrue(a == 0,”a 不能等于 0”);</p>
-<p>自带OCUnit的测试用例最常用的方法有三个：</p>
-<ol>
-<li><ul>
-<li>(void)setUp：每个test方法执行前调用</li>
+        <p>简单介绍下runtime<br><a href="http://www.cocoachina.com/ios/20141018/9960.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20141018/9960.html</a></p>
+<p><a href="http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/" target="_blank" rel="external">http://zhiwei.li/text/2014/08/09/objective-c运行时objc_msgsend_stret/</a></p>
+<p>我们在运行代码的时候 像下面这个方法：</p>
+<p> [target doMethodWith:var1];  运行时会转换为 objc_msgSend(target,@selector(doMethodWith:),var1);  C语言函数指针</p>
+<p>关于runtime的一些问题：<a href="http://blog.csdn.net/a19860903/article/details/45044701" target="_blank" rel="external">http://blog.csdn.net/a19860903/article/details/45044701</a></p>
+<p>第一、文章里面有一个问题：</p>
+<p>下面的代码输出什么？</p>
+<p>@implementation Son : Father</p>
+<ul>
+<li>(id)init</li>
 </ul>
-</li>
-<li><ul>
-<li>(void)tearDown：每个test方法执行后调用</li>
-</ul>
-</li>
-<li><ul>
-<li>(void)testXXX：命名为XXX的测试方法</li>
-</ul>
-</li>
-</ol>
-<p>我们也可以自己起个方法名字 - (void)xxxx 里面放入我们想要测试的功能。</p>
-<p>比如你可以单独测试某个网络接口是否可以使用，不用再一个一个页面进行跳转然后进行测试。</p>
-<p>注意：相应的文件链接地址也要在单元测试里配置下。</p>
-<p>当然也有一些高级的作用，比如自动发布、自动测试（特别在一些大的项目，以防止程序被误改或引起新的问题）。</p>
-<p>这个可以有空研究下…</p>
-<p>两篇不错的文章：<a href="http://www.jianshu.com/p/8bbec078cabe" target="_blank" rel="external">http://www.jianshu.com/p/8bbec078cabe</a><br><a href="http://www.cocoachina.com/industry/20130724/6667.html" target="_blank" rel="external">http://www.cocoachina.com/industry/20130724/6667.html</a></p>
+<p>{</p>
+<pre><code>self = [super init];
+
+if (self)
+
+{
+
+    NSLog(@&quot;%@&quot;, NSStringFromClass([self class]));
+
+    NSLog(@&quot;%@&quot;, NSStringFromClass([super class]));
+
+}
+
+return self;
+</code></pre><p>}</p>
+<p>@end</p>
+<p>答案：都输出 Son （前提是father和son类都没有重写class这个方法，而是调用的nsobject的class方法）</p>
+<p>首先对于这个题，如果Son类没有重写class方法，而Father类里重写了NSObject的class这个方法，那么[self class] 会去调用父类Father里的class方法，如果想要上面输出: Son 和 Father这种正确的类名，那么就要重写两个类的class方法:</p>
+<p>Son.m<br>//- (Class)class OBJC_SWIFT_UNAVAILABLE(“use ‘anObject.dynamicType’ instead”)<br>//{<br>//    return  [Son class];<br>//}</p>
+<p>Father.m<br>//- (Class)class OBJC_SWIFT_UNAVAILABLE(“use ‘anObject.dynamicType’ instead”)<br>//{<br>//   return  [Father class];<br>//}</p>
+<p>首先这道题，如果你想打印父类，那么就不应该这样写：     </p>
+<p>NSLog(@”%@”, NSStringFromClass([super class]));</p>
+<p>而是：</p>
+<p>NSLog(@”%@”,NSStringFromClass([self superclass]));</p>
+<p>达到我们需要的结果后，我们就要思考，上面那段为什么会都输出Son呢，到底进行了什么？</p>
+<p>首先前面说到过类似 [self class] 这种 会在运行时转换成 objc_msgSend 函数,objc_msgSend， 它就是负责发送一个消息给对象的C函数</p>
+<p>objc-runtime.h 里面 </p>
+<p>#include <objc runtime.h=""></objc></p>
+<p>#include <objc message.h=""> </objc></p>
+<p>objc_msgSend 和 objc_msgSendSuper 就是在message.h 类里</p>
+<p>这个函数 objc_msgSend(&lt;#id#&gt;, &lt;#SEL, …#&gt;)<br>有两个参数 </p>
+<p>id objc_msgSend(id self, SEL op, …)<br>我们把 self 做为第一个参数传递进去。</p>
+<p>id objc_msgSendSuper(struct objc_super *super, SEL op, …)</p>
+<p>第一个参数是 objc_super 这样一个结构体，其定义如下:</p>
+<p>struct objc_super {</p>
+<p>   __unsafe_unretained id receiver;</p>
+<p>   __unsafe_unretained Class super_class;</p>
+<p>};</p>
+<p>结构体有两个成员，第一个成员是 receiver, 类似于上面的 objc_msgSend函数第一个参数self 。第二个成员是记录当前类的父类是什么。<br>…<br>解惑：这个题目主要是考察关于objc中对 self 和 super 的理解。</p>
+<p>self 是类的隐藏参数，指向当前调用方法的这个类的实例。</p>
+<p>而 super 是一个 Magic Keyword， 它本质是一个编译器标示符，和 self 是指向的同一个消息接受者。</p>
+<p>上面的例子不管调用[self class]还是[super class]，接受消息的对象都是当前 Son ＊xxx 这个对象。而不同的是，super是告诉编译器，调用 class 这个方法时，要去父类的方法，而不是本类里的。</p>
+<p>Class实际上是存在于内存中的，可以看成是一个特殊的对象 对一个子类发消息，如果子类中找不到对应的方法，会自动向上搜索，直到根类</p>
+<p>[super class];在哪个类里写，哪个类就是接收消息的对象 self 指在本类中找到方法 让本类去执行  super 是在编译的时候 让机器去父类或者父类的父类找方法 然后还是本类执行 所以 【super class】 是在父类的父类 也就是NSObject中 找到了这个方法 但是 执行的时候 都是Son 执行的 所以 打印结果就是一样的（个人理解）</p>
+<p>具体多看上面的连接，熟能生巧。</p>
+<p>待补充</p>
 
       
     </div>
@@ -267,18 +295,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/03/02/iOSRuntime/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          iOS Runtime
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/02/26/iOSDIY NSNotificationCenter/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">实现一个自己的NSNotificationCenter</div>
+    <a href="/2016/03/01/iOSUnitTesting/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS单元测试简单使用</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -313,7 +332,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSUnitTesting" data-title="iOS单元测试简单使用" data-url="http://yoursite.com/2016/03/01/iOSUnitTesting/"></div>
+	<div class="ds-thread" data-thread-key="iOSRuntime" data-title="iOS Runtime" data-url="http://yoursite.com/2016/03/02/iOSRuntime/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
