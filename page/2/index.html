@@ -188,6 +188,85 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSBlock" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/03/iOSBlock/" class="article-date">
+  	<time datetime="2016-02-03T03:31:43.000Z" itemprop="datePublished">2016-02-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/03/iOSBlock/">Block</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>block其实挺强大的，现在来做个总结，从简单到难</p>
+<p>简单认识block <a href="http://my.oschina.net/u/1418722/blog/233047" target="_blank" rel="external">http://my.oschina.net/u/1418722/blog/233047</a></p>
+<p>利用block代替委托 <a href="http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_9e8867eb0102uykn.html</a></p>
+<p>可能会出现的问题: </p>
+<p>1.capturing ‘self’ strongly in this block is like<br>例如：<br> //如果不写这句话 下面block里就会出现 ：capturing ‘self’ strongly in this block is like<br>    __block DNHorizontalSelectController *  blockSelf = self;</p>
+<pre><code>_navTabbarView.updateTabBarSelectBlock = ^(NSInteger index)
+{
+    index = index%1000;
+
+    blockSelf.mainScrollView.contentOffset = CGPointMake(self.view.frame.size.width*index, 0);
+};
+</code></pre><p>block 是代码块的意思。 甲里引用乙，乙里引用甲，就会导致 “retain cycle” – “形成怪圈”的错误。 网上资料： 解决的办法是 创建一个本地变量 指向 自己(self). 例如：_items 实际上是 self-&gt;items, _block 对象在创建的时候会被retain一次 改成： __block ViewController <em>blockSelf = self; _block = ^{ [blockSelf-&gt;_items addObject:@”Hello!”]; }; 就可以了。 ——————- DoSomethingManager </em>manager = [[DoSomethingManager alloc] init]; manager.complete = ^{ //…complete actions [manager otherAction]; manager.complete = nil; // Objective-C 用这种方法破坏怪圈。 [manager release]; }; ————…</p>
+<p>为什么不用<strong>block 是因为通过引用来访问self的实例变量 ，self被retain,block也是一个强引用，引起循环引用，用</strong>week是弱引用，当self释放时，weakSelf已经等于nil。<br>self 持有 block  ,block持有 self retaincount==0才会释放 循环了怎么-1</p>
+<p><a href="http://blog.csdn.net/youngqj/article/details/49301627" target="_blank" rel="external">http://blog.csdn.net/youngqj/article/details/49301627</a></p>
+<p>2.<strong>block 还是 </strong>weak</p>
+<p>Blocks可以访问局部变量，但是不能修改</p>
+<p>如果修改局部变量，需要加__block</p>
+<p>在某個變數前面如果加上修飾字__block 的話(注意block前有兩個下底線)，這個變數又稱為block variable。那麼在block裡就可以任意修改此變數值，變數值的改變也可以知道。 </p>
+<p>block中用到的外部变量最好使用 __weak 修饰，避免内存泄露; block容易引起引用循环的根本原因是: </p>
+<p>1，对于(block内部用到的)外部变量，对其执行retain 的时机 与该block的执行时机是不同步的,在block声明的时候就对外部变量进行了retain，而block何时执行甚至是否执行都是不可预测的； </p>
+<p>2，block 一般是匿名的，而且copy赋值的，手动释放block对象比较困难</p>
+<p>两者的区别：</p>
+<p>1.<strong>block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。<br>2.</strong>weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。<br>3.<strong>block对象可以在block中被重新赋值，</strong>weak不可以。<br>PS：<strong>unsafe_unretained修饰符可以被视为iOS SDK 4.3以前版本的</strong>weak的替代品，不过不会被自动置空为nil。所以尽可能不要使用这个修饰符。</p>
+<p><strong>weak不增加引用，</strong>block增加引用<br><strong>block 是让修改外部变量的值.
+</strong>weak是避免memory cycle </p>
+<p>在ARC下不用<strong>block 而是用 </strong>weak 为了避免出现循环引用</p>
+<p>有异议可以提<br>连接:<a href="http://www.bubuko.com/infodetail-782508.html" target="_blank" rel="external">http://www.bubuko.com/infodetail-782508.html</a><br><a href="http://my.oschina.net/u/255456/blog/423991" target="_blank" rel="external">http://my.oschina.net/u/255456/blog/423991</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSNetwork-function6" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
