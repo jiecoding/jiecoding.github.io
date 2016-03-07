@@ -4,24 +4,24 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>两个数组取不同值 | Jay</title>
+  <title>iOS里的各种通知及机制 | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.现有两个无序数组a和b,b中的元素在a中都存在,请设计一个方案,找出在a中,但不在b中的所有元素.请考虑降低时间复杂度.
-方法1:    //首先呢,前看看苹果是否提供这类的比较方法很幸运,苹果提供了 NSPredicate,它所属Cocoa框架.利用它可以做类似数据库那样的查询 筛选等..
-链接:http://zhidao.baidu.com/link?url=96djsD_wancK72D">
+  <meta name="description" content="通知、本地通知和推送通知区别以及APNS 的机制
+对于很多初学者往往会把iOS中的本地通知、推送通知和iOS通知中心的概念弄混。其实二者之间并没有任何关系，事实上它们都不属于一个框架，前者属于UIKit框架，后者属于Foundation框架。
+通知中心实际上是iOS程序内部之间的一种消息广播机制，主要为了解决应用程序内部不同对象之间解耦而设计。它是基于观察者模式设计的，不能跨应用程序进程通信，当通">
 <meta property="og:type" content="article">
-<meta property="og:title" content="两个数组取不同值">
-<meta property="og:url" content="http://yoursite.com/2016/03/05/iOSABArray/index.html">
+<meta property="og:title" content="iOS里的各种通知及机制">
+<meta property="og:url" content="http://yoursite.com/2016/03/05/iOSNotification/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description" content="1.现有两个无序数组a和b,b中的元素在a中都存在,请设计一个方案,找出在a中,但不在b中的所有元素.请考虑降低时间复杂度.
-方法1:    //首先呢,前看看苹果是否提供这类的比较方法很幸运,苹果提供了 NSPredicate,它所属Cocoa框架.利用它可以做类似数据库那样的查询 筛选等..
-链接:http://zhidao.baidu.com/link?url=96djsD_wancK72D">
-<meta property="og:updated_time" content="2016-03-07T01:47:28.000Z">
+<meta property="og:description" content="通知、本地通知和推送通知区别以及APNS 的机制
+对于很多初学者往往会把iOS中的本地通知、推送通知和iOS通知中心的概念弄混。其实二者之间并没有任何关系，事实上它们都不属于一个框架，前者属于UIKit框架，后者属于Foundation框架。
+通知中心实际上是iOS程序内部之间的一种消息广播机制，主要为了解决应用程序内部不同对象之间解耦而设计。它是基于观察者模式设计的，不能跨应用程序进程通信，当通">
+<meta property="og:updated_time" content="2016-03-07T03:42:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="两个数组取不同值">
-<meta name="twitter:description" content="1.现有两个无序数组a和b,b中的元素在a中都存在,请设计一个方案,找出在a中,但不在b中的所有元素.请考虑降低时间复杂度.
-方法1:    //首先呢,前看看苹果是否提供这类的比较方法很幸运,苹果提供了 NSPredicate,它所属Cocoa框架.利用它可以做类似数据库那样的查询 筛选等..
-链接:http://zhidao.baidu.com/link?url=96djsD_wancK72D">
+<meta name="twitter:title" content="iOS里的各种通知及机制">
+<meta name="twitter:description" content="通知、本地通知和推送通知区别以及APNS 的机制
+对于很多初学者往往会把iOS中的本地通知、推送通知和iOS通知中心的概念弄混。其实二者之间并没有任何关系，事实上它们都不属于一个框架，前者属于UIKit框架，后者属于Foundation框架。
+通知中心实际上是iOS程序内部之间的一种消息广播机制，主要为了解决应用程序内部不同对象之间解耦而设计。它是基于观察者模式设计的，不能跨应用程序进程通信，当通">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -195,11 +195,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-iOSABArray" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOSNotification" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/05/iOSABArray/" class="article-date">
-  	<time datetime="2016-03-05T03:21:43.000Z" itemprop="datePublished">2016-03-05</time>
+      <a href="/2016/03/05/iOSNotification/" class="article-date">
+  	<time datetime="2016-03-05T06:21:43.000Z" itemprop="datePublished">2016-03-05</time>
 </a>
     </div>
   
@@ -212,7 +212,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      两个数组取不同值
+      iOS里的各种通知及机制
     </h1>
   
 
@@ -228,33 +228,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1.现有两个无序数组a和b,b中的元素在a中都存在,请设计一个方案,找出在a中,但不在b中的所有元素.请考虑降低时间复杂度.</p>
-<p>方法1:    //首先呢,前看看苹果是否提供这类的比较方法<br>很幸运,苹果提供了 NSPredicate,它所属Cocoa框架.利用它可以做类似数据库那样的查询 筛选等..</p>
-<p>链接:<a href="http://zhidao.baidu.com/link?url=96djsD_wancK72DLlCQLPuQHzkdAEtsI0J-C8VSh4KNplCn4mOURHoz48Qu8fKqlAhfIkcCge94WAsdmZz7IS-Y-8M8jTBEPAAJ1vut0Jku" target="_blank" rel="external">http://zhidao.baidu.com/link?url=96djsD_wancK72DLlCQLPuQHzkdAEtsI0J-C8VSh4KNplCn4mOURHoz48Qu8fKqlAhfIkcCge94WAsdmZz7IS-Y-8M8jTBEPAAJ1vut0Jku</a></p>
-<p>注：NSPredicate所属Cocoa框架,在密码、用户名等正则判断中经常用到.<br>            类似于SQL语句<br>            NOT 不是<br>            SELF 代表字符串本身<br>            IN 范围运算符<br>            那么NOT (SELF IN %@) 意思就是：不是这里所指定的字符串的值<br>实验代码:</p>
-<p>NSArray *aArray = [[NSArray alloc] initWithObjects:@”0”,@”8”,@”9”,@”2”,@”1”,@”5”,nil];</p>
-<pre><code>NSArray *bArray =  [[NSArray alloc] initWithObjects:@&quot;2&quot;,@&quot;0&quot;,@&quot;1&quot;,@&quot;5&quot;,nil];
-
-NSPredicate * filterPredicate = [NSPredicate predicateWithFormat:@&quot;NOT (SELF IN %@)&quot;,bArray];
-//过滤数组
-NSArray * reslutFilteredArray = [aArray filteredArrayUsingPredicate:filterPredicate];
-
-NSLog(@&quot;Reslut Filtered Array = %@“,reslutFilteredArray);
-</code></pre><p>思考 苹果这样做 时间和复杂程度有哪些好处？</p>
-<p>方法2:通过遍历(1)<br>    NSMutableArray <em>reslutArr = [[NSMutableArray alloc] initWithArray:aArray];<br>    for(int i = 0 ; i &lt; aArray.count; i++)<br>    {<br>        NSString </em>aStr = aArray[i];<br>        NSLog(@”aStr:%@”,aStr);<br>        for (int j = 0; j&lt; bArray.count; j++) {<br>            NSString *bStr = bArray[j];<br>            if([aStr isEqualToString:bStr])<br>            {<br>                NSLog(@”%@”,bStr);<br>                [reslutArr removeObject:aStr];<br>                break;<br>            }<br>        }<br>    }<br>    NSLog(@“reslutArr:%@“,reslutArr);</p>
-<p>//遍历(2) 对1的优化.   从后往前遍历数组,然后匹配删除.使用containsObject方法的场景很常见,例如:判断某一个元素(对象)是否存在数组中.<br>    int i = (int)[aArray count]-1;<br>    for(;i &gt;= 0;i –){<br>        //containsObject 判断元素是否存在于数组中(根据两者的内存地址判断,相同：YES  不同：NO）<br>        if([bArray containsObject:[aArray objectAtIndex:i]]) {<br>            [aArray removeObjectAtIndex:i];<br>        }<br>    }<br>    NSLog(@”Data Array = %@“,aArray);</p>
-<p>//这里的aArray修改成了可变数组 方便removeObject不用定义第三个数组</p>
-<p> /<em> 遍历(3) 通过字典key 来进行对另一个数组的remove<br>     时间复杂度为n,一重For循环B数组 考虑b数组比a数组大,换成循环a数组 先将a数组转换成字典,所有元素作为Key  然后遍历B数组,B.元素作为Key到a字典去取值 这样时间复杂度为2n 我说的是纯算法,与具体编程语言无关
-     </em>/<br>    NSMutableDictionary <em>dic = [[NSMutableDictionary alloc] init];<br>    for (int i = 0 ;i&lt; aArray.count ; i ++)<br>    {<br>        NSString </em>aKey = aArray[i];<br>        [dic setValue:@”1” forKey:aKey];<br>    }<br>    NSLog(@”dic:%@”,dic);<br>    for (int j = 0; j &lt; bArray.count; j++) {</p>
-<pre><code>    NSString *bKey =  bArray[j];
-   [dic removeObjectForKey:bKey];
-    NSLog(@&quot;dic.allKeys:%@&quot;,dic.allKeys);
-}
-
-//思考比较这几种的 时间复杂度,比较下哪个最优？
-</code></pre><p>测试两段代码运行速度<br><a href="http://www.cocoachina.com/ios/20100721/1901.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20100721/1901.html</a><br>我打印了下时间 ,通过遍历和方法1 用了 ：<br>谓词和遍历 2016-03-06 11:45:23.717 TestAB[1000:69199] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;cost time = 0.000007<br>通过字典这种方法用了 2016-03-06 11:46:47.528 TestAB[1036:71234] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;cost time = 0.000011</p>
-<p>也就是说 最好还是用系统自带的谓词或者用自己写的遍历会计算机处理会快一些.当然字典这种也是简便清晰快捷的方法.</p>
-<p>具体代码请看我的github地址:<a href="https://github.com/jiecoding/ABArrayAlgorithm" target="_blank" rel="external">https://github.com/jiecoding/ABArrayAlgorithm</a></p>
+        <p>通知、本地通知和推送通知区别以及APNS 的机制</p>
+<p>对于很多初学者往往会把iOS中的本地通知、推送通知和iOS通知中心的概念弄混。其实二者之间并没有任何关系，事实上它们都不属于一个框架，前者属于UIKit框架，后者属于Foundation框架。</p>
+<p>通知中心实际上是iOS程序内部之间的一种消息广播机制，主要为了解决应用程序内部不同对象之间解耦而设计。它是基于观察者模式设计的，不能跨应用程序进程通信，当通知中心接收到消息之后会根据内部的消息转发表，将消息发送给订阅者。</p>
+<p>iOS中通知机制又叫消息机制，其包括两类：一类是本地通知；另一类是推送通知，也叫远程通知。<br>两种通知在iOS中的表现一致，可以通过横幅或者弹出提醒两种形式告诉用户，并且点击通知可以会打开应用程序，但是实现原理却完全不同。</p>
+<p>本地通知是由本地应用触发的，它是基于时间行为的一种通知形式，例如闹钟定时、待办事项提醒<br>又或者一个应用在一段时候后不使用通常会提示用户使用此应用等都是本地通知。</p>
+<p>在iOS中如果点击一个弹出通知（或者锁屏界面滑动查看通知），默认会自动打开当前应用。</p>
+<p>由于通知由系统调度那么此时进入应用有两种情况：如果应用程序已经完全退出那么此时会调用- (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions方法；</p>
+<p>如果此时应用程序还在运行（无论是在前台还是在后台）则会调用-(void)application:(UIApplication <em>)application didReceiveLocalNotification:(UILocalNotification </em>)notification方法接收消息参数。当然如果是后者自然不必多说，因为参数中已经可以拿到notification对象，只要读取userInfo属性即可。如果是前者的话则可以访问launchOptions中键为UIApplicationLaunchOptionsLocalNotificationKey的对象，这个对象就是发送的通知，由此对象再去访问userInfo。为了演示这个过程在下面的程序中将userInfo的内容写入文件以便模拟关闭程序后再通过点击通知打开应用获取userInfo的过程。</p>
+<p>和本地通知不同，推送通知是由应用服务提供商发起的，</p>
+<p>通过苹果的APNs（Apple Push Notification Server）发送到应用客户端</p>
+<p><a href="http://www.cnblogs.com/kenshincui/p/4168532.html" target="_blank" rel="external">http://www.cnblogs.com/kenshincui/p/4168532.html</a></p>
+<p>待补充……</p>
 
       
     </div>
@@ -264,18 +249,9 @@ NSLog(@&quot;Reslut Filtered Array = %@“,reslutFilteredArray);
     
 <nav id="article-nav">
   
-    <a href="/2016/03/05/iOSNotification/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          iOS里的各种通知及机制
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/04/iOSAnAudition/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关于面试</div>
+    <a href="/2016/03/05/iOSABArray/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">两个数组取不同值</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -310,7 +286,7 @@ NSLog(@&quot;Reslut Filtered Array = %@“,reslutFilteredArray);
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="iOSABArray" data-title="两个数组取不同值" data-url="http://yoursite.com/2016/03/05/iOSABArray/"></div>
+	<div class="ds-thread" data-thread-key="iOSNotification" data-title="iOS里的各种通知及机制" data-url="http://yoursite.com/2016/03/05/iOSNotification/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

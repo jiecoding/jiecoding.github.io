@@ -190,6 +190,113 @@
 
       <div class="body-wrap">
   
+    <article id="post-NSObjectIdInstancetypeDifference" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/12/NSObjectIdInstancetypeDifference/" class="article-date">
+  	<time datetime="2016-02-12T14:30:58.000Z" itemprop="datePublished">2016-02-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/12/NSObjectIdInstancetypeDifference/">NSObject和id的区别以及Instancetype、id&lt;NSObject&gt;</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们来分析下这三种定义的各自含义和区别 以及最后说到id返回类型都写成Instancetype的好处:</p>
+<ol>
+<li>id foo1;</li>
+<li>NSObject *foo2;</li>
+<li>id <code>＜NSObject＞</code> foo3;</li>
+</ol>
+<p>(1) id类型被称之为 万能指针，也就是可以指向任何对象，可以用于任何类型的对象。</p>
+<p>它可以指向的类型不仅限于NSObject</p>
+<p>id 我们经常看到运用的地方莫过于</p>
+<p>@property (nonatomic, weak, nullable) id <uitableviewdelegate> delegate;</uitableviewdelegate></p>
+<p>这个是系统UIKit框架里uitableview定义的 delegate 用的是id的类型.(delegate委托是一种设计模式，是一种设计思想。委托经常依赖协议来实现)</p>
+<p>因为我们通常设计一个类的delegate时候，没有办法确定是什么对象来做delegate，所以用id，表示任何对象都可以，这种不能确定类型的需求还是蛮多的,比如有的数组内容类型不一样，进行遍历的时候等。</p>
+<p>这里也就体现了动态类型id.可以在代码运行时判断对象的类型。</p>
+<p>使用id类型(又称强类型)可以在运行的时候使用任何数据类型来替换。动态类型让程序更加灵活，但会使数据的统一性降低。我们常用的静态类型如NSString等是有着自己的优势的，使用静态类型编译器可以完全分析代码的性能，可预知性更高。</p>
+<p>编译器看到id以后，认为是动态类型，不在检查类型</p>
+<p>注意的是id 是一个指针，所以在使用id的时候不需要加星号，比如，<br>id foo=nil; </p>
+<p>上述语句定义了一个nil 指针，这个指针指向NSObject 的任意一个子类。</p>
+<p>而“id *foo=nil;”则定义了一个指针，这个指针指向另一个指针，被指向的这个指针指向NSObject的一个子类。</p>
+<p>id 是Objective-C中的一个特殊的数据类型，还有nil、Nil、SEL…</p>
+<p>他们中的大多数都可以在/usr/include/objc/objc.h或者这个目录中的其他头文件中找到。</p>
+<p>typedef struct objc_class <em>Class;<br>typedef struct objc_object {<br>    Class isa;<br>} </em>id;</p>
+<p>(2) NSObject，NSObject <em> 本身就是定义指向NSObject类型的指针.<br>NSObject</em>就是 NSObject类型的指针了，它范围较小。<br>NSObject对象会惊醒编译时检查（需要强制类型转换）</p>
+<p>(3) 然后让我们来总结下id 与 NSObject 区别：<br>从编译时来看:<br>1，id关键字在编译时不被检查，而NSObject在编译时会被检查是否被调用一些错误方法。<br>从范围上来看：<br>2，id可以是任何对象，包括非NSObject对象<br>从定义上来看：<br>3，定义id的时候不使用*，NSObject却需要。<br>我的理解，基本上来讲，定义id类似于定义了一个地址（只有指针，抽象指针），而NSObject是确实的定义了一个逻辑对象的地址。</p>
+<p>(4).id<code>＜NSObject＞</code><br>   id<code>＜NSObject＞</code>告诉编译器，你不关心对象是什么类型，但它必须遵守NSObject协议(protocol)，编译器就能保证所有赋值给id<code>＜NSObject＞</code>类型的对象都遵守NSObject协议(protocol)。这样的指针可以指向任何NSObject对象，因为NSObject对象遵守NSObject协议(protocol)，而且，它也可以用来保存NSProxy对象，因为它也遵守NSObject协议(protocol)。这是非常强大，方便且灵活，你不用关心对象是什么类型，而只关心它实现了哪些方法。</p>
+<p>(5)instancetype</p>
+<p>instancetype是clang 3.5开始，clang提供的一个关键字，表示某个方法返回的未知类型的Objective-C对象。我们都知道未知类型的的对象可以用id关键字表示，那为什么还会再有一个instancetype呢？</p>
+<p>instancetype 是一个关键字，它只能用来定义OC方法的返回值类型。</p>
+<p>使用 instancetype 编译器和IDE 会做类型检查，而id不会做完整的类型检查。</p>
+<p>用instancetype代替id作返回类型有什么好处<br>1、明确性。代码只做你让它做的事，而不是其他。<br>2、程式化。你会养成好习惯，这些习惯在某些时候会很有用，而且肯定有用武之地。<br>3、一致性。让代码可读性更好。<br><a href="http://zhidao.baidu.com/link?url=xIZ09neuu_V5NbNES_WFrazzWTkB32wdSEPNWUbTSTe-SdTdsbdcS0wvZIToPg_evGCJYQv6L_AqQhuOm1ZjDscmuRQqiywypKyB139rySe" target="_blank" rel="external">连接</a><br><a href="http://www.th7.cn/Program/IOS/201404/191629.shtml" target="_blank" rel="external">连接</a><br><a href="http://blog.csdn.net/yongyinmg/article/details/43668567" target="_blank" rel="external">连接</a>       </p>
+<p>它和id比较：</p>
+<p>相同点<br>都可以作为方法的返回类型<br>不同点<br>1 instancetype可以返回和方法所在类相同类型的对象，id只能返回未知类型的对象；<br>2 instancetype只能作为返回值，不能像id那样作为参数 </p>
+<p>总结：instancetype更加智能,编译器知道要返回什么类型,而id则不能,所以以后尽量用 instancetype</p>
+<p>以下链接是参考和扩展:<br>Object-C 类，对象，运行时，isa<br><a href="http://blog.sina.com.cn/s/blog_7a2ffd5c01010nme.html" target="_blank" rel="external">连接</a>       </p>
+<p>动态类型 动态绑定 动态载入 SEL类型:<br><a href="http://www.tekuba.net/program/278/" target="_blank" rel="external">连接</a>       </p>
+<p>Objective-C中的id这种数据类型存在的价值是什么？：<br><a href="http://www.zhihu.com/question/22814649" target="_blank" rel="external">连接</a>       </p>
+<p>iOS数据类型:<br><a href="http://www.mamicode.com/info-detail-649183.html" target="_blank" rel="external">连接</a>       </p>
+<p>Objective-C id 数据类型:<br><a href="http://blog.sina.com.cn/s/blog_7aa21f320100quho.html" target="_blank" rel="external">连接</a>       </p>
+<p>Objective-C中的一些特殊的数据类型 id、nil、Nil、SEL:<br><a href="http://blog.sina.com.cn/s/blog_6fa695690100y2kk.html" target="_blank" rel="external">连接</a>       </p>
+<p>Objective-C中的id类型:<br><a href="http://blog.csdn.net/lonelyroamer/article/details/7711895" target="_blank" rel="external">连接</a>       </p>
+<p>如何才能系统的学习 iOS 开发，理解一些规则和深层次的机制原理？<br><a href="http://www.zhihu.com/question/20016551" target="_blank" rel="external">连接</a>    </p>
+<p>iOS开发中很重要，很常用，但却容易被忽略的知识点：id ,NSObject, id<nsobject>区别<br><a href="http://blog.csdn.net/linjinxing/article/details/9994903" target="_blank" rel="external">连接</a>    </nsobject></p>
+<p>第一次接触OC多态，动态类型与动态绑定 - 小四也软开<br><a href="http://www.tuicool.com/articles/Vb2YvqY" target="_blank" rel="external">连接</a>    </p>
+<p>C语言基本数据类型简介<br><a href="http://www.cnblogs.com/onedime/archive/2012/11/21/2780149.html" target="_blank" rel="external">连接</a>    </p>
+<p>Objective-C的内省(Introspection)机制小结<br>明智地使用内省可以使面向对象的程序更加高效和强壮。<br>它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。<br><a href="http://mikixiyou.iteye.com/blog/1743868" target="_blank" rel="external">连接</a>    </p>
+<p>Objective-C语法之动态类型(isKindOfClass, isMemberOfClass,id)等<br>对象在运行时获取其类型的能力称为内省。内省可以有多种方法实现。<br><a href="http://www.linuxidc.com/Linux/2012-07/64453.htm" target="_blank" rel="external">连接</a>    </p>
+<p>在C++中我们知道void*是一个万能指针，或者是叫通用对象，<br>那么在OC中也有这样一个类似作业的通用对象，叫做id，id是OC中的万能指针，它可以指向任何类型的对象。<br>如果receiver是id类型，在运行之前编译器是不会给出警告的,因为编译器不知道id中是什么类型，<br>当程序运行时id中保存对象类型确定，这个时候id的类型也就是消息这个对象的类型。<br>要是对象所属类中没找到这个类型，运行时程序会有问题<br>比如说<br>传递给id的类型是A类型，要是这个类中没有A类型，那么这个程序就会有问题。</p>
+<p>Objective-C学习之动态绑定和id类型<br><a href="http://www.xcoder.cn/html/2013/objc_0621/11545.html" target="_blank" rel="external">连接</a>    </p>
+<p>id和NSObject *和instanceType的区别与联系 - 顺子为王<br><a href="http://www.tuicool.com/articles/jANrmq" target="_blank" rel="external">连接</a>    </p>
+<p>iOS中id与NSObject* 和id<nsobject>的区别<br><a href="http://www.devdiv.com/ios_id_nsobject_id_lt_nsobject_gt_-blog-1-50764.html" target="_blank" rel="external">连接</a>    </nsobject></p>
+<p>id类型的使用与NSObject区别<br><a href="http://bbs.itheima.com/thread-209812-1-1.html" target="_blank" rel="external">连接</a>    </p>
+<p>id 与 NSObject 区别<br><a href="http://blog.sina.com.cn/s/blog_6fa695690100ylaa.html" target="_blank" rel="external">连接</a>    </p>
+<p>强类型语言和弱类型语言<br><a href="http://blog.sina.com.cn/s/blog_9dc987e50101brwi.html" target="_blank" rel="external">连接</a>    </p>
+<p>instancetype、id、NSObject的区别<br><a href="http://www.tuicool.com/articles/NZbaQza" target="_blank" rel="external">连接</a>    </p>
+<p>instancetype<br><a href="http://www.bkjia.com/IOSjc/733043.html" target="_blank" rel="external">连接</a>    </p>
+<p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，没有使用次数多的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-ThinkOC-OOP" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -724,70 +831,9 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/01/hello-world/" class="article-date">
-  	<time datetime="2016-01-01T14:30:58.000Z" itemprop="datePublished">2016-01-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
