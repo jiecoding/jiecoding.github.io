@@ -188,6 +188,85 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSABArray" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/05/iOSABArray/" class="article-date">
+  	<time datetime="2016-03-05T03:21:43.000Z" itemprop="datePublished">2016-03-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/05/iOSABArray/">两个数组取不同值</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.现有两个无序数组a和b,b中的元素在a中都存在,请设计一个方案,找出在a中,但不在b中的所有元素.请考虑降低时间复杂度.</p>
+<p>方法1:    //首先呢,前看看苹果是否提供这类的比较方法<br>很幸运,苹果提供了 NSPredicate,它所属Cocoa框架.利用它可以做类似数据库那样的查询 筛选等..</p>
+<p>链接:<a href="http://zhidao.baidu.com/link?url=96djsD_wancK72DLlCQLPuQHzkdAEtsI0J-C8VSh4KNplCn4mOURHoz48Qu8fKqlAhfIkcCge94WAsdmZz7IS-Y-8M8jTBEPAAJ1vut0Jku" target="_blank" rel="external">http://zhidao.baidu.com/link?url=96djsD_wancK72DLlCQLPuQHzkdAEtsI0J-C8VSh4KNplCn4mOURHoz48Qu8fKqlAhfIkcCge94WAsdmZz7IS-Y-8M8jTBEPAAJ1vut0Jku</a></p>
+<p>注：NSPredicate所属Cocoa框架,在密码、用户名等正则判断中经常用到.<br>            类似于SQL语句<br>            NOT 不是<br>            SELF 代表字符串本身<br>            IN 范围运算符<br>            那么NOT (SELF IN %@) 意思就是：不是这里所指定的字符串的值<br>实验代码:</p>
+<p>NSArray *aArray = [[NSArray alloc] initWithObjects:@”0”,@”8”,@”9”,@”2”,@”1”,@”5”,nil];</p>
+<pre><code>NSArray *bArray =  [[NSArray alloc] initWithObjects:@&quot;2&quot;,@&quot;0&quot;,@&quot;1&quot;,@&quot;5&quot;,nil];
+
+NSPredicate * filterPredicate = [NSPredicate predicateWithFormat:@&quot;NOT (SELF IN %@)&quot;,bArray];
+//过滤数组
+NSArray * reslutFilteredArray = [aArray filteredArrayUsingPredicate:filterPredicate];
+
+NSLog(@&quot;Reslut Filtered Array = %@“,reslutFilteredArray);
+</code></pre><p>思考 苹果这样做 时间和复杂程度有哪些好处？</p>
+<p>方法2:通过遍历(1)<br>    NSMutableArray <em>reslutArr = [[NSMutableArray alloc] initWithArray:aArray];<br>    for(int i = 0 ; i &lt; aArray.count; i++)<br>    {<br>        NSString </em>aStr = aArray[i];<br>        NSLog(@”aStr:%@”,aStr);<br>        for (int j = 0; j&lt; bArray.count; j++) {<br>            NSString *bStr = bArray[j];<br>            if([aStr isEqualToString:bStr])<br>            {<br>                NSLog(@”%@”,bStr);<br>                [reslutArr removeObject:aStr];<br>                break;<br>            }<br>        }<br>    }<br>    NSLog(@“reslutArr:%@“,reslutArr);</p>
+<p>//遍历(2) 对1的优化.   从后往前遍历数组,然后匹配删除.使用containsObject方法的场景很常见,例如:判断某一个元素(对象)是否存在数组中.<br>    int i = (int)[aArray count]-1;<br>    for(;i &gt;= 0;i –){<br>        //containsObject 判断元素是否存在于数组中(根据两者的内存地址判断,相同：YES  不同：NO）<br>        if([bArray containsObject:[aArray objectAtIndex:i]]) {<br>            [aArray removeObjectAtIndex:i];<br>        }<br>    }<br>    NSLog(@”Data Array = %@“,aArray);</p>
+<p>//这里的aArray修改成了可变数组 方便removeObject不用定义第三个数组</p>
+<p> /<em> 遍历(3) 通过字典key 来进行对另一个数组的remove<br>     时间复杂度为n,一重For循环B数组 考虑b数组比a数组大,换成循环a数组 先将a数组转换成字典,所有元素作为Key  然后遍历B数组,B.元素作为Key到a字典去取值 这样时间复杂度为2n 我说的是纯算法,与具体编程语言无关
+     </em>/<br>    NSMutableDictionary <em>dic = [[NSMutableDictionary alloc] init];<br>    for (int i = 0 ;i&lt; aArray.count ; i ++)<br>    {<br>        NSString </em>aKey = aArray[i];<br>        [dic setValue:@”1” forKey:aKey];<br>    }<br>    NSLog(@”dic:%@”,dic);<br>    for (int j = 0; j &lt; bArray.count; j++) {</p>
+<pre><code>    NSString *bKey =  bArray[j];
+   [dic removeObjectForKey:bKey];
+    NSLog(@&quot;dic.allKeys:%@&quot;,dic.allKeys);
+}
+
+//思考比较这几种的 时间复杂度,比较下哪个最优？
+</code></pre><p>测试两段代码运行速度<br><a href="http://www.cocoachina.com/ios/20100721/1901.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20100721/1901.html</a><br>我打印了下时间 ,通过遍历和方法1 用了 ：<br>谓词和遍历 2016-03-06 11:45:23.717 TestAB[1000:69199] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;cost time = 0.000007<br>通过字典这种方法用了 2016-03-06 11:46:47.528 TestAB[1036:71234] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;cost time = 0.000011</p>
+<p>也就是说 最好还是用系统自带的谓词或者用自己写的遍历会计算机处理会快一些.当然字典这种也是简便清晰快捷的方法.</p>
+<p>具体代码请看我的github地址:<a href="https://github.com/jiecoding/ABArrayAlgorithm" target="_blank" rel="external">https://github.com/jiecoding/ABArrayAlgorithm</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSAnAudition" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -974,69 +1053,6 @@ if([observerE.observer isEqual:observer]){
 <p>instancetype、id、NSObject的区别<br><a href="http://www.tuicool.com/articles/NZbaQza" target="_blank" rel="external">连接</a>    </p>
 <p>instancetype<br><a href="http://www.bkjia.com/IOSjc/733043.html" target="_blank" rel="external">连接</a>    </p>
 <p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，没有使用次数多的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-ThinkOC-OOP" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/03/ThinkOC-OOP/" class="article-date">
-  	<time datetime="2016-02-03T05:21:32.000Z" itemprop="datePublished">2016-02-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/03/ThinkOC-OOP/">Objective-c如何在C基础上实现面向对象</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这里说一下Swift也是基于C和Objective-C，而却没有C的一些兼容约束，关于swift以后的文章还会说，现在先来看看Objective-c如何在C基础上实现面向对象？</p>
-<p>面向对象三大特性：封装、继承、多态<br>在C语言里如果要实现 ：<br>封装：struct实现。</p>
-<p>继承:指针实现，就是把父类包含在结构体中。 </p>
-<p>多态:可以用指针来实现。</p>
-<p>具体可参照:<br> <a href="http://blog.csdn.net/songcdut/article/details/8132609" target="_blank" rel="external">C语言例子</a><br> <a href="http://blog.csdn.net/kennyrose/article/details/7564105" target="_blank" rel="external">C语言例子</a></p>
-<p>引用总结一句话:面向对象从来都是思想，而不是语言! 理解面向对象的编程思想，我们使用C语言这样的较低级的语言也同样可以实现OOP。像c语言用的里面具体用到的有C语言中的宏，结构体，函数指针, 聚合组合等知识。</p>
-<p>接下来我们看看objective-c到底是怎么把c给做到面向对象的：</p>
-<p>虽然Objective-C是C的超集，但它不视C的基本类型为第一级的对象。</p>
-<p>Objective-C是扩充C的面向对象编程语言。</p>
-<p>Objective-C是非常实用的语言。它是一个用C写成、很小的运行库，令应用程序的尺寸增加很小，和大部分OO系统使用极大的VM执行时间会取代了整个系统的运作相反。Objective-C写成的程序通常不会比其原始码大很多。而其函式库(通常没附在软件发行本)亦和Smalltalk系统要使用极大的内存来开启一个窗口的情况相反。因此，Objective-C它完全兼容标准C语言（C++对C语言的兼容仅在于大部分语法上，而在ABI（Application Binary Interface）上，还需要使用extern “C”这种显式声明来与C函数进行兼容），而在此基础上增加了面向对象编程语言的特性以及Smalltalk消息机制。</p>
-<p>我自己的理解呢就是把C语言写成了一个面向对象思想的运行库，产生objective-c这样的语言。是不是很有意思？多多思考，饮水思源.C语言还是相当重要的，只不过我们平时开发的一些东西，用不到这些细节而已！但是这些东西还是有必要去明白的，因为个人感觉它们才是不变的东西。如果有一天遇到比较庞大的用户量，对细节要求比较严格的时候，它们就可以灵活运用，来实现底层的一些东西，这样对自己的实现某些功能会更加灵活。想想都觉得有魅力，激动啊！  以上只是个人理解，如果有不对的请批评指出，有不同的意见可以提出来一起讨论检验!</p>
 
       
     </div>
