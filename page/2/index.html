@@ -127,6 +127,16 @@
 			        
 			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.devtang.com">唐巧的博客</a>
 			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.onevcat.com">王巍的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.txx.im">虾神的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://kittenyang.com">Kitten的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://casatwy.com/category/blog.html">casatwy的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.jianshu.com/p/818d121363dd">更多博客</a>
+			        
 			        </div>
 				</section>
 				
@@ -271,6 +281,63 @@
 <p>instancetype、id、NSObject的区别<br><a href="http://www.tuicool.com/articles/NZbaQza" target="_blank" rel="external">连接</a>    </p>
 <p>instancetype<br><a href="http://www.bkjia.com/IOSjc/733043.html" target="_blank" rel="external">连接</a>    </p>
 <p>像这种细节性的问题，一般浮躁的或者不去留心观察的人，不多问几个为什么的人，没有使用次数多的人，是不太会去关注这几个关键字的区别的，这也就是很多程序员之间的差异。思考多的 深入的人，往往能够看得更深入透彻一些，在实际运用中也能更加灵活，更加的有较好的选择性，大多数的问题都可以到网上搜到，但是别人遇到的问题毕竟不是自己的，我们也没有经过那个过程，所以还是勤奋点 多让自己接触点，这样知识涉及的多，思考的也就多了，善于利用搜索引擎和思考实践总结。编程学的其实越来越像一种思维方式了（个人感觉），但是光思考是不行的，最最重要的还是行动去实践检验探究，这样才会变得更加强大，所以大家一起来探讨深入研究吧 哈哈 再絮叨一句 个人感觉这些东西就像金钱一样，掌握的尽可能越多越好，因为以后用到钱用的这些知识的地方会很多，不要等到那个时候再去学再去攒钱或想着一夜致富啥的就太晚了，不要浮躁享受积累的力量吧。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOSABCThread" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/07/iOSABCThread/" class="article-date">
+  	<time datetime="2016-02-07T12:21:43.000Z" itemprop="datePublished">2016-02-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/07/iOSABCThread/">现有三个任务A、B、C。C任务必须要在A B 全部并行执行完毕才能执行</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现有三个任务A、B、C。C任务必须要在A B 全部并行执行完毕才能执行。</p>
+<p>如果想在dispatch_queue中所有的任务执行完成后在做某种操作，在串行队列中，可以把该操作放到最后一个任务执行完成后继续，但是在并行队列中怎么做呢。这就有dispatch_group 成组操作。比如</p>
+<p> dispatch_queue_t dispatchQueue = dispatch_queue_create(“ted.queue.next”, DISPATCH_QUEUE_CONCURRENT);<br>    dispatch_group_t dispatchGroup = dispatch_group_create();<br>    dispatch_group_async(dispatchGroup, dispatchQueue, ^(){<br>        NSLog(@”dispatch-1”);<br>    });<br>    dispatch_group_async(dispatchGroup, dispatchQueue, ^(){<br>        NSLog(@”dspatch-2”);<br>    });<br>    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(){<br>        NSLog(@”end”);<br>    });</p>
+<p>上面的 log1 和log2输出顺序不定，因为是在并行队列上执行，当并行队列全部执行完成后，最后到main队列上执行一个操作，保证“end”是最后输出。 另外，这里也可以不用创建自己的并行队列，用全局的global，那个也是个并行队列. dispatch_get_gloable_queue(0,0);</p>
+<p><a href="http://www.cnblogs.com/zhidao-chen/p/3596981.html" target="_blank" rel="external">http://www.cnblogs.com/zhidao-chen/p/3596981.html</a></p>
 
       
     </div>
@@ -752,59 +819,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>测试<del>~</del><del>~</del>~~~   </p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-preface" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/28/preface/" class="article-date">
-  	<time datetime="2016-01-28T12:31:21.000Z" itemprop="datePublished">2016-01-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/28/preface/">前言(必读)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果生活总是不如你意，那是因为<br>你还没有阅读本人的博客</p>
 
       
     </div>
