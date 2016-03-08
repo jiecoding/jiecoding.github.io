@@ -200,6 +200,61 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSWindowViewLayer" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/07/iOSWindowViewLayer/" class="article-date">
+  	<time datetime="2016-03-07T03:21:43.000Z" itemprop="datePublished">2016-03-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/07/iOSWindowViewLayer/">UIWindow和UIView和CALayer的联系和区别</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UIView,UIWindow和CALayer都有共同的基类NSObject,UIView继承于UIResponder,所以UIView可以响应用户事件,CALayer是继承于NSObject所以不可以响应用户事件.UIView侧重于对内容的管理,CALayer侧重于对内容的绘制. UIWindow是特殊的UIView,通常一个app只有一个UIWindow,我们可以创建一个视图控制器,然后将这个视图控制器添加到UIWindow上面,这时这个视图控制器就是app的First Responder.</p>
+<p>UIView是视图的基类，UIViewController是视图控制器的基类，UIResponder是表示一个可以在屏幕上响应触摸事件的对象；<br>UIwindow是UIView的子类，UIWindow的主要作用：一是提供一个区域来显示UIView，二是将事件(event)的分发给UIView，一个应用基本上只有一个UIWindow.<br>万物归根，UIView和CALayer都是的老祖都是NSObjet。可见UIResponder是用来响应事件的，也就是UIView可以响应用户事件。<br>　　<br>CALayer和UIView的区别：<br>1.1 UIView的继承结构为: UIResponder : NSObject。<br>CALayer的继承结构为： NSObject。可见UIResponder是用来响应事件的，也就是UIView可以响应用户事件，CALayer直接从NSObject继承，因为缺少了UIResponder类，不能响应任何用户事件。<br>1.2所属框架,UIView是在/System/Library/Frameworks/UIKit.framework中定义的,UIKit主要是用来构建用户界面，并且是可以响应事件的。CALayer是在/System/Library/Frameworks/QuartzCore.framework定义的。而且CALayer作为一个低级的，可以承载绘制内容的底层对象出现在该框架中。<br>1.3 UIView相比CALayer最大区别是UIView可以响应用户事件，而CALayer不可以。UIView侧重于对显示内容的管理，CALayer侧重于对内容的绘制。UIView是基于CALayer的高层封装。<br>1.4相似支持1：相似的树形结构2：显示内容绘制方式3:布局约束<br>总结一下就是：UIView是用来显示内容的，可以处理用户事件.CALayer是用来绘制内容的，对内容进行动画处理依赖与UIView来进行显示，不能处理用户事件</p>
+<p><a href="http://tieba.baidu.com/p/4239135997" target="_blank" rel="external">http://tieba.baidu.com/p/4239135997</a><br><a href="http://www.thinksaas.cn/group/topic/396637/" target="_blank" rel="external">http://www.thinksaas.cn/group/topic/396637/</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSNotification" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -942,86 +997,6 @@ if([observerE.observer isEqual:observer]){
 <p>为什么要有runloop呢？群友：因为手机是个消耗品 主要是电 当没有操作的时候手机需要休眠进行良性循环 也可以理解成一个触发器 你预制的事件在没有被触发的时候就会进入低消耗模式</p>
 <p>有不同意见的或者对文章有疑问的请评论，我会及时回复，一起交流探讨。</p>
 <p>另外可以加入我们的群：328218600</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-property" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/17/property/" class="article-date">
-  	<time datetime="2016-02-17T01:21:43.000Z" itemprop="datePublished">2016-02-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/17/property/">深入理解@property</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>看文章之前，我们先思考下，@property 为什么会存在，它的意义在于什么？我们普通定义的变量和用@Property定义的有什么区别？如果只是作用域的问题，那么跟public的成员变量有何区别？以及@Property后面括号里的各个关键字的作用。希望看完此文能够解开这些迷惑，更好的理解@Property和对它更好的运用。</p>
-<p>首先我们先来看下什么是@property ，Objective-C语言关键词，与@synthesize配对使用。xcode4.5以及以后的版本，@synthesize可以省略。</p>
-<p>声明property的语法为：@property (参数1,参数2) 类型 名字;<br>如：<br>@property(nonatomic,retain) UIWindow *window;</p>
-<p>其中括号里的参数主要分为三类：<br>读写属性：<br>（readwrite/readonly/setter = /getter = ）</p>
-<p>setter语意：<br>（assign/retain/copy）</p>
-<p>原子性：<br> （atomicity/nonatomic）</p>
-<p>各参数意义如下：<br>readwrite<br>产生setter\getter方法</p>
-<p>readonly<br>只产生简单的getter,没有setter, 默认的读写属性.</p>
-<p>setter =<br>指定生成setter方法的名字</p>
-<p>getter =<br>指定生成getter方法的名字</p>
-<p>assign<br>默认类型,setter方法直接赋值，而不进行retain操作, 适用于基本数据类型, 对对象类型, 不会发生引用计数变化.</p>
-<p>retain<br>setter方法对参数进行release旧值，再retain新值。</p>
-<p>copy<br>setter方法进行Copy操作，与retain一样，使用copy:对NSString类型 关于copy以后会写一篇文章专门说说</p>
-<p>atomic<br>保证多线程访问下的安全, 但浪费系统资源, 原子性控制的默认设置.</p>
-<p>nonatomic<br>禁止多线程，变量保护，提高性能<br>指出访问器不是原子操作，而默认地，访问器是原子操作。这也就是说，在多线程环境下，解析的访问器提供一个对属性的安全访问，从获取器得到的返回值或者通过设置器设置的值可以一次完成，即便是别的线程也正在对其进行访问。如果你不指定nonatomic，在自己管理内存的环境中，解析的访问器保留并自动释放返回的值，如果指定了nonatomic，那么访问器只是简单地返回这个值。 </p>
-<p>还有strong与weak是由ARC新引入的对象变量属性<br>xcode 4.2（ios sdk4.3和以下版本）和之前的版本使用的是retain和assign，是不支持ARC的。xcode 4.3（ios5和以上版本）之后就有了ARC，并且开始使用<br>strong与weak<br>简单讲strong等同retain weak等同于assign。只是根据mrc和arc的时候选择使用。</p>
-<p>unsafe_unretained<br>unsafe_unretained 就是ios5版本以下的 assign ，也就是 unsafe_unretained ， weak， assign 三个都是一个样的。 因为 ios5用的是 weak ，那在ios4.3就用不了，如果你将 weak 修改为 unsafe_unretained ，那就可以用了。说到底就是iOS 5之前的系统用该属性代替 weak 来使用。 </p>
-<p>关于unsafe_unretained ， weak， assign用于非指针变量。用于<br>基础数据类型 （例如NSInteger）和C数据类型（int, float, double, char, 等），另外还有id<br>反正记住：前面不需要加 “*” 的就根据MRC和ARC 以及 iOS sdk来选择使用 unsafe_unretained ， weak， assign吧 。</p>
-<p>strong\retain：用于指针变量。就是说你定义了一个变量，然后这个变量在程序的运行过程中会被更改，并且影响到其他方法。一般是用于字符串（ NSString，NSMutableString），数组（NSMutableArray，NSArray），字典对象，视图对象（UIView ），控制器对象（UIViewController）等<br>xcode 4.2不支持ARC，所以会频繁使用retain来修饰，用完释放掉，而xcode4.3支持ARC，可以使用retian，不需要手动释放内存，系统会自动为你完成，如果你在xcode4.3上面开发，retian和strong都是一样的，没区别 </p>
-<p>在内存方面assign是被自动释放的，retain是需要手动去释放。</p>
-<p>关于为什么sb拖出的控件默认用的是weak而不是strong ，在知乎上有人给出了答案：<br>IBOutlet的属性一般可以设为weak是因为它已经被view引用了，除非view被释放，否则IBOutlet的属性也不会被释放，另外IBOutlet属性的生命周期和view应该是一致的，所以IBOutlet属性一般设为weak。如果你那个Outlet 是在第一层 不是在view上的就是 strong的</p>
-<p>以上纯属个人理解，有不对的地方请指出，谢谢。</p>
-<p>知乎连接：<a href="http://www.zhihu.com/question/29927614?sort=created" target="_blank" rel="external">http://www.zhihu.com/question/29927614?sort=created</a></p>
-<p>这里补充几个新的大家看看了解一下：<br>1.nonnull<br>@property (nonnull, nonatomic, strong) NSString *name;<br>nonnull : 标示当前属性不为空,让外界放心用,只做标示用,即使为空,也木有办法<br>    相当于swift里面的 ! 号</p>
-<p>2..nullable<br>@property (nullable, nonatomic, strong) NSString <em>petName;<br>nullable : 标示当前属性可能为空,让外界使用时注意<br>    相当于swift里面的 ? 号<br>3.&lt;Person </em>&gt;<br>@property (nullable , nonatomic, strong) NSArray<person *=""> *friends;<br>有点类似于泛型和id的结合,目的是告诉开发人员,数组内装的什么鬼<br>    代表数组内的对象 is kind of 所填的类型 , 当开发人员用的时候不需要再进行从父类强转到子类</person></p>
-<p>那么说了这么多:@property它的存在意义是什么呢？ 我个人理解就是自动生成setter getter方法。@property是给编辑器看的。就算你不声明@property，在obj的@implenmention下写好valueA和setValueA，还是可以obj.valueA赋值或取值，但是没有自动联想。还有一个区别是：@property 可以更好的管理内存，我们在括号里写的关键字定义就是。 和public的成员变量有何区别：property可以自己实现存取方法。</p>
-<p>以上有的是摘自别人的总结，我感觉很对就拿来了，有什么大家觉得理解不一样的，可以说出来讨论讨论。</p>
-<p>我相信此片文章只是浅谈了一下，希望大家能够更深的交流，我也会及时补充一些。</p>
 
       
     </div>
