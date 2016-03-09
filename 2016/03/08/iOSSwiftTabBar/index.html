@@ -4,17 +4,39 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2016 | Jay</title>
+  <title>Swift tabbarController | Jay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jay">
-<meta property="og:url" content="http://yoursite.com/archives/2016/page/3/index.html">
+  <meta name="description" content="自定义实现 swift版本的tabbarController，很常用，容易扩展和维护 ，更多好的开源请关注我的github地址
+class AppDelegate: UIResponder, UIApplicationDelegate {
+var window: UIWindow?
+
+
+var navigationVC : NSMutableArray!
+
+func controllerWithB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift tabbarController">
+<meta property="og:url" content="http://yoursite.com/2016/03/08/iOSSwiftTabBar/index.html">
 <meta property="og:site_name" content="Jay">
-<meta property="og:description">
+<meta property="og:description" content="自定义实现 swift版本的tabbarController，很常用，容易扩展和维护 ，更多好的开源请关注我的github地址
+class AppDelegate: UIResponder, UIApplicationDelegate {
+var window: UIWindow?
+
+
+var navigationVC : NSMutableArray!
+
+func controllerWithB">
+<meta property="og:updated_time" content="2016-03-09T11:29:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jay">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Swift tabbarController">
+<meta name="twitter:description" content="自定义实现 swift版本的tabbarController，很常用，容易扩展和维护 ，更多好的开源请关注我的github地址
+class AppDelegate: UIResponder, UIApplicationDelegate {
+var window: UIWindow?
+
+
+var navigationVC : NSMutableArray!
+
+func controllerWithB">
   
     <link rel="alternative" href="/atom.xml" title="Jay" type="application/atom+xml">
   
@@ -200,134 +222,165 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-iOSSwiftTabBar" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2016/03/08/iOSSwiftTabBar/" class="article-date">
+  	<time datetime="2016-03-08T03:21:43.000Z" itemprop="datePublished">2016-03-08</time>
+</a>
+    </div>
   
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift tabbarController
+    </h1>
+  
+
+      </header>
       
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/01/iOSNetwork-function2/" class="archive-article-date">
-  	<time datetime="2016-02-01T05:00:30.000Z" itemprop="datePublished">Feb 1</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/01/iOSNetwork-function2/">深入理解iOS网络框架 &lt;一&gt;</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>自定义实现 swift版本的tabbarController，很常用，容易扩展和维护 ，更多好的开源请关注我的github地址</p>
+<p>class AppDelegate: UIResponder, UIApplicationDelegate {</p>
+<pre><code>var window: UIWindow?
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+var navigationVC : NSMutableArray!
+
+func controllerWithBarTitle (title : String , viewControllerClass :UIViewController , tag: NSInteger , tabbarIconImageName :String )
+{
+    let viewController : UIViewController =   viewControllerClass;
+
+    let navigationVC = UINavigationController(rootViewController: viewController);
+
+    let tabbarAPengDaiImage = UIImage(named: tabbarIconImageName);
+
+    navigationVC.tabBarItem = UITabBarItem(title:title,image:tabbarAPengDaiImage,tag:tag);
+    if((self.navigationVC) == nil)
+    {
+        self.navigationVC = NSMutableArray()
+    }
+    self.navigationVC! .addObject(navigationVC);
+
+}
+
+func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {
+    // Override point for customization after application launch.
+
+    //  UITabBarController
+    let tabBarController = UITabBarController();
+
+    self .controllerWithBarTitle(&quot;AAA&quot;, viewControllerClass: AAAViewController(), tag: 1, tabbarIconImageName: &quot;TabBar_HomeNormal.png&quot;);
+
+    self .controllerWithBarTitle(&quot;BB财&quot;, viewControllerClass: InvestmentViewController(), tag: 2, tabbarIconImageName: &quot;TabBar_InvestmentNormal.png&quot;);
+
+    self .controllerWithBarTitle(&quot;CC户&quot;, viewControllerClass: AccountViewController(), tag: 3, tabbarIconImageName: &quot;TabBar_AccountNormal.png&quot;);
+
+    self .controllerWithBarTitle(&quot;邀请好友&quot;, viewControllerClass: InviteViewController(), tag: 4, tabbarIconImageName: &quot;TabBar_InviteNormal.png&quot;);
+
+    print(self.navigationVC);
+
+
+    tabBarController.viewControllers = self.navigationVC as?[UIViewController];
+    /*
+    as操作符用来把某个实例转型为另外的类型，由于实例转型可能失败，因此Swift为as操作符提供了两种形式：选项形式as?和强制形式as
+
+    选项形式（as?）的操作执行转换并返回期望类型的一个选项值，如果转换成功则返回的选项包含有效值，否则选项值为 nil 强制形式（as ）的操作执行一个实例到目的类型的强制转换，因此使用该形式可能触发一个运行时错误。
+    */
+
+    self.window!.rootViewController = tabBarController;
+    /*
+    self.window!.和self.window?.区别
+    个人理解
+    ！ 是强制取值( forced- value) 表达式，
+    ？ 是(optional chaining expression) 可选链表达式。
+    ?是你不确定opt里面有没有东西,!是你确定里面有东西,当然没有东西的也可以!,但是会分分钟崩溃给你看 ! 号编译器可以分析你的代码
+
+    */
+
+
+    return true
+}
+</code></pre>
+      
+    </div>
+    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/07/iOSWindowViewLayer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">UIWindow和UIView和CALayer的联系和区别</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/29/iOSNetwork-function1/" class="archive-article-date">
-  	<time datetime="2016-01-29T08:52:00.000Z" itemprop="datePublished">Jan 29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/29/iOSNetwork-function1/">如何更有钱</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/28/preface/" class="archive-article-date">
-  	<time datetime="2016-01-28T12:31:21.000Z" itemprop="datePublished">Jan 28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/28/preface/">前言(必读)</a>
-    </h1>
-  
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/01/hello-world/" class="archive-article-date">
-  	<time datetime="2016-01-01T14:30:58.000Z" itemprop="datePublished">Jan 1</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/01/hello-world/">Hello World</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2016/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2016/">1</a><a class="page-number" href="/archives/2016/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
-  
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOSSwiftTabBar" data-title="Swift tabbarController" data-url="http://yoursite.com/2016/03/08/iOSSwiftTabBar/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -353,8 +406,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
