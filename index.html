@@ -202,6 +202,76 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSAFSwiftBan" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/11/iOSAFSwiftBan/" class="article-date">
+  	<time datetime="2016-03-11T03:21:43.000Z" itemprop="datePublished">2016-03-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/11/iOSAFSwiftBan/">Swift网络请求md5等加密库使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>import Alamofire  swift版本的afnetworking</p>
+<p><a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">https://github.com/Alamofire/Alamofire</a></p>
+<p>import CryptoSwift swift版本的各种加密包括md5 SHA AES….</p>
+<p><a href="https://github.com/krzyzanowskim/CryptoSwift" target="_blank" rel="external">https://github.com/krzyzanowskim/CryptoSwift</a></p>
+<p>这里直接说使用:<br>get请求</p>
+<p>md5:</p>
+<p>var md5ArrStr :String;<br>md5ArrStr = md5ArrStr.md5()</p>
+<p>传的参数<br> let parameters:Dictionary = [“stampToken”:stampToken,”checkToken”:md5ArrStr];</p>
+<p>Alamofire.request(.GET, “<a href="https://safdsafd.com/api/v2/project/fsda”" target="_blank" rel="external">https://safdsafd.com/api/v2/project/fsda”</a>, parameters: parameters)<br>            .responseJSON { response in</p>
+<pre><code>        print(&quot;result==\(response.result)&quot;)   // 返回结果，是否成功
+        if let jsonValue = response.result.value {
+
+            print(&quot;code: \(jsonValue[&quot;respDesc&quot;])&quot;)
+        }
+}
+</code></pre><p>后台返回可以通过 jsonValue来获取相应key的值</p>
+<p>详细的使用和见解请持续关注,支持,有什么疑问 可以评论</p>
+<p><img src="http://jiecoding.github.io/blogImages/donateMe.png"><br><img src="http://jiecoding.github.io/blogImages/88zhifuD.png"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOSWisdom" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -912,93 +982,6 @@ if([observerE.observer isEqual:observer]){
 </li>
 </ul>
 <p>}<br>关于消息处理方法runtime等 可以预览下 <a href="http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html" target="_blank" rel="external">http://www.cnblogs.com/buro79xxd/archive/2012/04/10/2440074.html</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSARCLeak" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/25/iOSARCLeak/" class="article-date">
-  	<time datetime="2016-02-25T05:21:43.000Z" itemprop="datePublished">2016-02-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/25/iOSARCLeak/">ARC下内存泄露的一些情况</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>循环引用<br>A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。</li>
-</ol>
-<p>  这种问题常发生于把delegate声明为strong属性了。</p>
-<p>  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。</p>
-<ol>
-<li><p>死循环</p>
-<p>如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，ViewController也不能被释放。</p>
-</li>
-</ol>
-<p>  这种问题常发生于animation处理。</p>
-<p>  CATransition *transition = [CATransition animation];</p>
-<p>transition.duration = 0.5;</p>
-<p>tansition.repeatCount = HUGE_VALL;</p>
-<p>[self.view.layer addAnimation:transition forKey:”myAnimation”];</p>
-<p>上例中，animation重复次数设成HUGE_VALL，一个很大的数值，基本上等于无限循环了。</p>
-<p>解决办法是，在ViewController关掉的时候，停止这个animation。</p>
-<p> 参照资料： <a href="http://www.aichengxu.com/view/30206" target="_blank" rel="external">http://www.aichengxu.com/view/30206</a></p>
-<ol>
-<li>block的循环引用:</li>
-</ol>
-<p>这个例子的问题就在于在使用 block 的过程中形成了循环引用：self 持有 networkFetecher；networkFetecher 持有 block；block 持有 self。三者形成循环引用，内存泄露。</p>
-<p>4.performSelector 系列<br>performSelector 顾名思义即在运行时执行一个 selector，最简单的方法如下</p>
-<ul>
-<li>(id)performSelector:(SEL)selector;</li>
-</ul>
-<p>但 performSelector 相比直接调用更加灵活</p>
-<p>SEL selector;<br>if (/<em> some condition </em>/) {<br>    selector = @selector(newObject);<br>} else if (/<em> some other condition </em>/) {<br>    selector = @selector(copy);<br>} else {<br>    selector = @selector(someProperty);<br>}<br>id ret = [object performSelector:selector];</p>
-<p>这段代码就相当于在动态之上再动态绑定。在 ARC 下编译这段代码，编译器会发出警告</p>
-<p>正是由于动态，编译器不知道即将调用的 selector 是什么，不了解方法签名和返回值，甚至是否有返回值都不懂，所以编译器无法用 ARC 的内存管理规则来判断返回值是否应该释放。因此，ARC 采用了比较谨慎的做法，不添加释放操作，即在方法返回对象时就可能将其持有，从而可能导致内存泄露。</p>
-<ol>
-<li>在使用 NSTimer addtarget 时，为了防止 target 被释放而导致的程序异常，timer 会持有 target，所以这也是一处内存泄露的隐患。</li>
-</ol>
-<p>6.try…catch</p>
-<p>详细参照:<a href="https://www.zybuluo.com/MicroCai/note/67734" target="_blank" rel="external">https://www.zybuluo.com/MicroCai/note/67734</a><br>觉得总结的不错。</p>
 
       
     </div>

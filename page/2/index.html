@@ -202,6 +202,93 @@
 
       <div class="body-wrap">
   
+    <article id="post-iOSARCLeak" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/25/iOSARCLeak/" class="article-date">
+  	<time datetime="2016-02-25T05:21:43.000Z" itemprop="datePublished">2016-02-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/25/iOSARCLeak/">ARC下内存泄露的一些情况</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>循环引用<br>A有个属性参照B，B有个属性参照A，如果都是strong参照的话，两个对象都无法释放。</li>
+</ol>
+<p>  这种问题常发生于把delegate声明为strong属性了。</p>
+<p>  上例中，解决办法是把SampleClass 的delegate属性的strong改为assing即可。</p>
+<ol>
+<li><p>死循环</p>
+<p>如果某个ViewController中有无限循环，也会导致即使ViewController对应的view关掉了，ViewController也不能被释放。</p>
+</li>
+</ol>
+<p>  这种问题常发生于animation处理。</p>
+<p>  CATransition *transition = [CATransition animation];</p>
+<p>transition.duration = 0.5;</p>
+<p>tansition.repeatCount = HUGE_VALL;</p>
+<p>[self.view.layer addAnimation:transition forKey:”myAnimation”];</p>
+<p>上例中，animation重复次数设成HUGE_VALL，一个很大的数值，基本上等于无限循环了。</p>
+<p>解决办法是，在ViewController关掉的时候，停止这个animation。</p>
+<p> 参照资料： <a href="http://www.aichengxu.com/view/30206" target="_blank" rel="external">http://www.aichengxu.com/view/30206</a></p>
+<ol>
+<li>block的循环引用:</li>
+</ol>
+<p>这个例子的问题就在于在使用 block 的过程中形成了循环引用：self 持有 networkFetecher；networkFetecher 持有 block；block 持有 self。三者形成循环引用，内存泄露。</p>
+<p>4.performSelector 系列<br>performSelector 顾名思义即在运行时执行一个 selector，最简单的方法如下</p>
+<ul>
+<li>(id)performSelector:(SEL)selector;</li>
+</ul>
+<p>但 performSelector 相比直接调用更加灵活</p>
+<p>SEL selector;<br>if (/<em> some condition </em>/) {<br>    selector = @selector(newObject);<br>} else if (/<em> some other condition </em>/) {<br>    selector = @selector(copy);<br>} else {<br>    selector = @selector(someProperty);<br>}<br>id ret = [object performSelector:selector];</p>
+<p>这段代码就相当于在动态之上再动态绑定。在 ARC 下编译这段代码，编译器会发出警告</p>
+<p>正是由于动态，编译器不知道即将调用的 selector 是什么，不了解方法签名和返回值，甚至是否有返回值都不懂，所以编译器无法用 ARC 的内存管理规则来判断返回值是否应该释放。因此，ARC 采用了比较谨慎的做法，不添加释放操作，即在方法返回对象时就可能将其持有，从而可能导致内存泄露。</p>
+<ol>
+<li>在使用 NSTimer addtarget 时，为了防止 target 被释放而导致的程序异常，timer 会持有 target，所以这也是一处内存泄露的隐患。</li>
+</ol>
+<p>6.try…catch</p>
+<p>详细参照:<a href="https://www.zybuluo.com/MicroCai/note/67734" target="_blank" rel="external">https://www.zybuluo.com/MicroCai/note/67734</a><br>觉得总结的不错。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-multithreading" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -845,60 +932,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>CFNetwork API位于基础的 BSD socket之上，用在NSStream. URL 加载系统、Bonjour与GameKit,API的实现中.它为HTTP与FTP等高级协议提供了原生支持.CFNetwork与BSD socket之间的主要差别在于运行循环集成.如果应用使用了CFNetwork。那么输入和输出实践都会在线程的运行循环中进行调度。如果输入与输出事件发生在辅助线程中，就需要以恰当的模式开始运行循环。<br>CFNetwork比URL加载系统提供了更多的配置选项,这个结果是喜忧参半，在使用CFNetwork创建HTTP请求时可用使用这些配置选项。在创建请求时，需要手工将与请求，一同发送的HTTP头和Cookie信息添加进去。但对于NSURLConnection来说，标准的头与Cookie信息会被自动添加进去。<br>CFNetwork基本设施构建在Core Foundation层的CFSocket与CFStream API之上。CFNetwork包含了针对特定协议的API，比如用于与FTP服务器通信的CFFTP、用于发送和接收HTTP消息的CFHTTP、用于发布与浏览Bonjour服务的CFNetwork等</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOSNetwork-function4" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/02/iOSNetwork-function4/" class="article-date">
-  	<time datetime="2016-02-02T01:20:30.000Z" itemprop="datePublished">2016-02-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/02/iOSNetwork-function4/">NSStream&lt;三&gt;</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>NSStream是一个Cocoa 级别的API,构建在CFNetwork之上，作为NSURLConnection的基础，旨在完全一些底层的网络任务。类似于NSConnection,NSStream提供了一种机制；用以与远程服务器或本地文件进行通信。不过，可以通过NSStream在诸如telnet或SMTP等NSURLConnection不支持的协议之上进行通信。<br>NSStream提供的额外控制是有代价的。它并没有提供对处理HTTP/S响应状态码或认证的内建支持。它所发出与接收的数据都位于C缓冲中，Objective-C开发者对此可能不大熟悉。它还无法管理多个外发请求，需要子类化才能添加这个特性。NSStream是异步的，通过NSStreamDelegate实现通信更新。</p>
-<p>关于底层网络的实现有待补充…</p>
 
       
     </div>
